@@ -1,6 +1,9 @@
 ## Getting Started
 
-First, run the development server:
+最新のURLはこちら
+```
+https://mimamori.vercel.app/
+```
 
 ```bash
 npm run dev
