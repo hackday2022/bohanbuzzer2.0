@@ -1,22 +1,22 @@
-import {createTheme} from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles'
 
 const theme = createTheme({
   palette: {
-    mode: "light",
+    mode: 'light',
     primary: {
-        main: '#FB9156',
-       },
+      main: '#FB9156',
+    },
     background: {
-        default: "#FB9156",
-      },
+      default: '#FB9156',
+    },
     text: {
-        primary: '#ffffff',
-    }
+      primary: '#ffffff',
+    },
   },
   typography: {
     fontFamily: [
       'Hind Vadodara',
-      "Helvetica",
+      'Helvetica',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
@@ -29,19 +29,18 @@ const theme = createTheme({
       '"Segoe UI Symbol"',
     ].join(','),
     h1: {
-    fontSize: '36px',
-    fontWeight: 700,
-    textAlign: 'center'
+      fontSize: '36px',
+      fontWeight: 700,
+      textAlign: 'center',
     },
     subtitle1: {
-        fontStyle: "normal",
-        fontWeight: 700,
-        fontSize: "14px",
-        lineHeight: "16px",
-        fontFamily: "Helvetica",
+      fontStyle: 'normal',
+      fontWeight: 700,
+      fontSize: '14px',
+      lineHeight: '16px',
+      fontFamily: 'Helvetica',
     },
-    },
-
+  },
 })
 
 export default theme
