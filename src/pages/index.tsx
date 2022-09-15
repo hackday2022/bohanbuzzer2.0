@@ -14,7 +14,12 @@ import { Grid } from '@mui/material'
 const Home: NextPage = () => {
   return (
     <Container
-      sx={{ bgcolor: 'background.default', width: '100%', height: '100vh' }}
+      sx={{
+        bgcolor: 'background.default',
+        width: '100%',
+        height: '100vh',
+        overflow: 'hidden',
+      }}
     >
       <Grid
         container
