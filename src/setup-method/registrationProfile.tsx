@@ -13,9 +13,9 @@ import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
-import CustomTextInput from '../pages/lib/customTextInput'
-import CompleteButton from '../pages/lib/completeButton'
-import CustomAutoComplete from '../pages/lib/customAutoComplete'
+import CustomTextInput from '../pages/component/customTextInput'
+import CompleteButton from '../pages/component/completeButton'
+import CustomAutoComplete from '../pages/component/customAutoComplete'
 
 export default function RegistrationProfile(props: any) {
   return (
