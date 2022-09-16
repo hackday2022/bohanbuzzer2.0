@@ -1,13 +1,13 @@
 import React from 'react'
 // import Head from 'next/head'
 // import Image from 'next/image'
-import '../firebase/init'
+import '../../firebase/init'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import CustomTextInput from '../pages/component/customTextInput'
-import CustomAutoComplete from '../pages/component/customAutoComplete'
-import InputSirialNumber from '../pages/component/inputSirialNumber'
+import CustomTextInput from '../component/customTextInput'
+import CustomAutoComplete from '../component/customAutoComplete'
+import InputSirialNumber from '../component/inputSirialNumber'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 
 export default function RegistrationDevice(props: any) {
