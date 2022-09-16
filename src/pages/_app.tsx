@@ -3,10 +3,10 @@ import type { AppProps } from 'next/app'
 import '../firebase/init'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from '../mui/theme'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [userAuth, setuserAuth] = React.useState(0)
+  // const [userAuth, setuserAuth] = React.useState(0)
   return (
     <ThemeProvider theme={theme}>
       <Component {...pageProps} />

@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import SegmentedButton from '../pages/component/segmentControlButton'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import FaceIcon from '@mui/icons-material/Face'
 
-export default function Map(props: any) {
-  const [page, setPage] = React.useState(0)
+export default function Map() {
   return (
     <div>
       <SegmentedButton
