@@ -43,11 +43,11 @@ const theme = createTheme({
     },
     subtitle2: {
       fontFamily: 'Helvetica',
-    fontStyle: "normal",
-    fontWeight: 700,
-    fontSize: "16px",
-    lineHeight: "18px",
-    color: "#707070"
+      fontStyle: 'normal',
+      fontWeight: 700,
+      fontSize: '16px',
+      lineHeight: '18px',
+      color: '#707070',
     },
   },
 })

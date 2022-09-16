@@ -11,7 +11,8 @@ a {
   text-decoration: none;
 }
 
-input, select {
+input,
+select {
   padding-left: 15px;
 }
 
@@ -98,6 +99,7 @@ input, select {
   color: #adadad;
 }
 
-input, select{
+input,
+select {
   padding-left: 15px;
 }
