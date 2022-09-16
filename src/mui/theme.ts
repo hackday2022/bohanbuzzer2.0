@@ -11,6 +11,7 @@ const theme = createTheme({
     },
     text: {
       primary: '#ffffff',
+      secondary: '#707070',
     },
   },
   typography: {
@@ -39,6 +40,14 @@ const theme = createTheme({
       fontSize: '14px',
       lineHeight: '16px',
       fontFamily: 'Helvetica',
+    },
+    subtitle2: {
+      fontFamily: 'Helvetica',
+    fontStyle: "normal",
+    fontWeight: 700,
+    fontSize: "16px",
+    lineHeight: "18px",
+    color: "#707070"
     },
   },
 })
