@@ -209,3 +209,41 @@ select {
   margin-right: auto;
   width: 100%;
 }
+
+video {
+  width: 100%;
+}
+.modal {
+  display: none;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 100;
+}
+
+.camera_text {
+  position: fixed;
+  bottom: 1rem;
+  left: 0;
+  width: 100%;
+  margin-top: 1rem;
+  color: #fff;
+  text-align: center;
+}
+.in_reading_camera_button {
+  position: fixed;
+  bottom: 6rem;
+  width: 90vw;
+  left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  color: #fff;
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+}
