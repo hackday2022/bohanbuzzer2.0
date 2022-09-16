@@ -4,13 +4,15 @@ import '../firebase/init'
 const auth = getAuth()
 const provider = new GoogleAuthProvider()
 
-export const GoogleLogin = () => {
+export default function GoogleLogin(router: any) {
   signInWithPopup(auth, provider)
-    .then((result) => {
-      console.log('Login completed', result)
-      return result
+    .then((authUser) => {
+      console.log('Login completed', authUser)
+      router.push('/signin')
+      return authUser
     })
     .catch((error) => {
       console.log(error, error.code, error.message)
+      return null
     })
 }

@@ -3,15 +3,17 @@ import React from 'react'
 // import Head from 'next/head'
 // import Image from 'next/image'
 import '../firebase/init'
-import { GoogleLogin } from '../auth/googleLogin'
+import GoogleLogin from '../auth/loginByGoogle'
 import Box from '@mui/material/Box'
 import Fab from '@mui/material/Fab'
 import Container from '@mui/material/Container'
 import GoogleIcon from '@mui/icons-material/Google'
 import Typography from '@mui/material/Typography'
 import { Grid } from '@mui/material'
+import { useRouter } from 'next/router'
 
 const Home: NextPage = () => {
+  const router = useRouter()
   return (
     <Container
       sx={{
@@ -39,7 +41,7 @@ const Home: NextPage = () => {
           </Box>
           <Box sx={{ mt: 15 }}>
             <Fab
-              onClick={() => GoogleLogin()}
+              onClick={() => GoogleLogin(router)}
               variant="extended"
               sx={{ bgcolor: 'white', textTransform: 'none' }}
             >

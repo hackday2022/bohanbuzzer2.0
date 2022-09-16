@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 // import Head from 'next/head'
 // import Image from 'next/image'
 import '../firebase/init'
@@ -19,17 +19,24 @@ export default function RegistrationDevice(props: any) {
       <Box mt={4} mb={3}>
         <CustomTextInput
           caption="デバイスの持ち主のお名前"
-          value=""
+          value={props.deviceName}
+          onChange={(e: any) => props.setDeviceName(e.target.value)}
           placeholder="Jackson"
         ></CustomTextInput>
       </Box>
       <Box my={3}>
-        <InputSirialNumber caption="シリアル番号" placeholder="手動で入力" />
+        <InputSirialNumber
+          caption="シリアル番号"
+          placeholder="手動で入力"
+          value={props.deviceSirial}
+          setDeviceSirial={props.setDeviceSirial}
+        />
       </Box>
       <Box mt={3} mb={1}>
         <CustomAutoComplete
           caption="持ち主の所属学校"
-          value=""
+          value={props.deviceSchool}
+          onChange={(e: any) => props.setDeviceSchool(e.target.value)}
           placeholder="見守り幼稚園"
           selectList={['見守り大学', '見守り大学院', '見守り研究室']}
         />

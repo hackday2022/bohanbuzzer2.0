@@ -47,7 +47,7 @@ export default function InputSirialNumber(props: any) {
             name="name"
             value={props.value}
             placeholder={props.placeholder}
-            onChange={props.onChange}
+            onChange={(e: any) => props.setDeviceSirial(e.target.value)}
           />
         </Grid>
       </Grid>

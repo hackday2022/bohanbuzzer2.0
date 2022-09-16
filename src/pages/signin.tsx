@@ -3,7 +3,6 @@ import React from 'react'
 // import Head from 'next/head'
 // import Image from 'next/image'
 import '../firebase/init'
-import { GoogleLogin } from '../auth/googleLogin'
 import Box from '@mui/material/Box'
 import Fab from '@mui/material/Fab'
 import Container from '@mui/material/Container'
@@ -12,8 +11,10 @@ import { Grid } from '@mui/material'
 import SchoolIcon from '@mui/icons-material/School'
 import FaceIcon from '@mui/icons-material/Face'
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded'
+import { useRouter } from 'next/router'
 
 const Signin: NextPage = () => {
+  const router = useRouter()
   return (
     <Container
       sx={{
@@ -28,8 +29,9 @@ const Signin: NextPage = () => {
         alignItems="center"
         justifyContent="center"
         direction="column"
+        sx={{ zIndex: 100 }}
       >
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ zIndex: 100 }}>
           <Box sx={{ mt: 20 }}>
             <Typography
               variant="h1"
@@ -41,7 +43,7 @@ const Signin: NextPage = () => {
           </Box>
           <Box sx={{ mt: 10, width: '209px', height: '55px' }}>
             <Fab
-              onClick={() => GoogleLogin()}
+              onClick={() => router.push('/setup')}
               variant="extended"
               className="login-chip"
               sx={{ bgcolor: 'white', textTransform: 'none' }}
@@ -55,7 +57,7 @@ const Signin: NextPage = () => {
           </Box>
           <Box sx={{ mt: 3, width: '209px', height: '55px' }}>
             <Fab
-              onClick={() => GoogleLogin()}
+              onClick={() => router.push('/setup')}
               variant="extended"
               className="login-chip"
               sx={{ bgcolor: 'white', textTransform: 'none' }}
