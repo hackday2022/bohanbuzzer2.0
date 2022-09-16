@@ -1,26 +1,27 @@
 import type { NextPage } from 'next'
-import React, { useEffect } from 'react'
+import React from 'react'
 // import Head from 'next/head'
 // import Image from 'next/image'
 import '../firebase/init'
-import { GoogleLogin } from '../auth/googleLogin'
 import Box from '@mui/material/Box'
-import Fab from '@mui/material/Fab'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { CardHeader, Grid } from '@mui/material'
+import { Grid } from '@mui/material'
 import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
-import Button from '@mui/material/Button'
-import CustomTextInput from './component/customTextInput'
 import CompleteButton from './component/completeButton'
-import CustomAutoComplete from './component/customAutoComplete'
 import RegistrationProfile from '../setup-method/registrationProfile'
 import RegistrationDevice from '../setup-method/registrationDevice'
+import { useRouter } from 'next/router'
 
 const Setup: NextPage = () => {
   const [page, setPage] = React.useState(0)
+  const [name, setName] = React.useState('')
+  const [area, setArea] = React.useState('')
+  const [deviceName, setDeviceName] = React.useState('')
+  const [deviceSchool, setDeviceSchool] = React.useState('')
+  const [deviceSirial, setDeviceSirial] = React.useState('')
+  const router = useRouter()
   return (
     <Container
       sx={{
@@ -35,8 +36,9 @@ const Setup: NextPage = () => {
         alignItems="center"
         justifyContent="center"
         direction="column"
+        sx={{ zIndex: 100 }}
       >
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ zIndex: 100 }}>
           <Box sx={{ mt: 5, mb: 5 }}>
             <Typography
               variant="h1"
@@ -52,10 +54,27 @@ const Setup: NextPage = () => {
               height: '100vh',
               boxShadow: '0px 1px 8px rgba(0, 0, 0, 0.1)',
               borderRadius: '24px 24px 0px 0px',
+              zIndex: 1,
             }}
           >
             <CardContent>
-              {page === 0 ? <RegistrationProfile /> : <RegistrationDevice />}
+              {page === 0 ? (
+                <RegistrationProfile
+                  name={name}
+                  setName={setName}
+                  area={area}
+                  setArea={setArea}
+                />
+              ) : (
+                <RegistrationDevice
+                  deviceName={deviceName}
+                  setDeviceName={setDeviceName}
+                  deviceSirial={deviceSirial}
+                  setDeviceSirial={setDeviceSirial}
+                  deviceSchool={deviceSchool}
+                  setDeviceSchool={setDeviceSchool}
+                />
+              )}
               <Box mb={2}>
                 {page === 0 ? (
                   <CompleteButton
@@ -64,7 +83,11 @@ const Setup: NextPage = () => {
                     onClick={() => setPage(1)}
                   />
                 ) : (
-                  <CompleteButton mode="light" name="完了" onClick={null} />
+                  <CompleteButton
+                    mode="light"
+                    name="完了"
+                    onClick={() => router.push('/map')}
+                  />
                 )}
               </Box>
               <Box mb={2}>
@@ -78,7 +101,7 @@ const Setup: NextPage = () => {
                   <CompleteButton
                     mode=""
                     name="戻る"
-                    onClick=""
+                    onClick={() => router.back()}
                   ></CompleteButton>
                 )}
               </Box>
