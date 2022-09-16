@@ -10,8 +10,8 @@ import { Grid } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CompleteButton from './component/completeButton'
-import RegistrationProfile from '../setup-method/registrationProfile'
-import RegistrationDevice from '../setup-method/registrationDevice'
+import RegistrationProfile from './setup-method/registrationProfile'
+import RegistrationDevice from './setup-method/registrationDevice'
 import { useRouter } from 'next/router'
 
 const Setup: NextPage = () => {

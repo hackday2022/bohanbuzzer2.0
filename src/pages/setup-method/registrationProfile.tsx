@@ -1,11 +1,11 @@
 import React from 'react'
 // import Head from 'next/head'
 // import Image from 'next/image'
-import '../firebase/init'
+import '../../firebase/init'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import CustomTextInput from '../pages/component/customTextInput'
-import CustomAutoComplete from '../pages/component/customAutoComplete'
+import CustomTextInput from '../component/customTextInput'
+import CustomAutoComplete from '../component/customAutoComplete'
 
 export default function RegistrationProfile(props: any) {
   return (
