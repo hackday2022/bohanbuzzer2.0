@@ -3,6 +3,9 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { Button, Grid } from '@mui/material'
 import QrCodeIcon from '@mui/icons-material/QrCode'
+import ReadCamera from '../../lib/readCamera'
+import StopCamera from '../../lib/stopCamera'
+import CompleteButton from '../component/completeButton'
 
 export default function InputSirialNumber(props: any) {
   return (
@@ -16,7 +19,7 @@ export default function InputSirialNumber(props: any) {
         <Grid item xs={8}>
           <Button
             variant="outlined"
-            onClick={props.onClick}
+            onClick={() => ReadCamera(props.setDeviceSirial)}
             sx={{
               boxShadow: 'None',
               border: '1px solid #C7C7C7',
@@ -51,6 +54,20 @@ export default function InputSirialNumber(props: any) {
           />
         </Grid>
       </Grid>
+      <div id="modal" className="modal">
+        <div id="interactive" className="viewport"></div>
+        <CompleteButton
+          mode=""
+          name="戻る"
+          className="in_reading_camera_button"
+          onClick={() => StopCamera()}
+        ></CompleteButton>
+        <p className="camera_text">
+          カメラにバーコードを写してください。
+          <br />
+          読み込みが完了すると元の画面に戻ります
+        </p>
+      </div>
     </div>
   )
 }

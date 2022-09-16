@@ -7,6 +7,7 @@ export default function CompleteButton(props: any) {
     return (
       <Button
         variant="contained"
+        className={props.className}
         onClick={props.onClick}
         sx={{
           boxShadow: 'None',
@@ -27,6 +28,7 @@ export default function CompleteButton(props: any) {
       <Button
         variant="outlined"
         onClick={props.onClick}
+        className={props.className}
         sx={{
           boxShadow: 'None',
           border: '1px solid #C7C7C7',

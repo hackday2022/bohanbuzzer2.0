@@ -21,7 +21,7 @@ export default function RegistrationDevice(props: any) {
           caption="デバイスの持ち主のお名前"
           value={props.deviceName}
           onChange={(e: any) => props.setDeviceName(e.target.value)}
-          placeholder="Jackson"
+          placeholder="見守り太郎"
         ></CustomTextInput>
       </Box>
       <Box my={3}>
