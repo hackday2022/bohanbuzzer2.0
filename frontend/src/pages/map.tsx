@@ -37,9 +37,9 @@ export default function Map() {
                 sx={{
                   fontSize: 30,
                   color: '#000000',
-                  marginTop: '8px',
-                  marginLeft: '5px',
-                  marginRight: '5px',
+                  width: '36px',
+                  height: '36px',
+                  transition: 'color .1s',
                 }}
                 key="1"
               />
@@ -52,9 +52,9 @@ export default function Map() {
                 sx={{
                   fontSize: 30,
                   color: '#000000',
-                  marginTop: '8px',
-                  marginLeft: '5px',
-                  marginRight: '5px',
+                  width: '36px',
+                  height: '36px',
+                  transition: 'color .1s',
                 }}
                 key="2"
               />
@@ -67,9 +67,9 @@ export default function Map() {
                 sx={{
                   fontSize: 30,
                   color: '#000000',
-                  marginTop: '8px',
-                  marginLeft: '5px',
-                  marginRight: '5px',
+                  width: '36px',
+                  height: '36px',
+                  transition: 'color .1s',
                 }}
                 key="3"
               />

@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import SpotIcon from '../../component/SpotIcon'
-import { GoogleMap, InfoBox } from '@react-google-maps/api'
+import { GoogleMap } from '@react-google-maps/api'
 import UserSelectButton from '../../component/UserSelectButton'
 import DangerousInformation from '../component/dangerousInformation'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
-import { Box, Drawer, IconButton } from '@mui/material'
-import SegmentedButton from '../../pages/component/segmentControlButton'
-import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import FaceIcon from '@mui/icons-material/Face'
+import { Box, IconButton, Drawer } from '@mui/material'
 
 export type MapPageProps = {
   isLoaded: boolean
@@ -139,8 +135,6 @@ export default function MapPage({ isLoaded }: MapPageProps) {
               }}
               clickableIcons={false}
               onLoad={async (map) => {
-                // console.log(window.innerWidth, window.innerHeight)
-                // const wlh = window.innerWidth / window.innerHeight
                 const bounds = new window.google.maps.LatLngBounds(
                   {
                     lat: defaultCenter.lat - 0.004,
@@ -151,9 +145,6 @@ export default function MapPage({ isLoaded }: MapPageProps) {
                     lng: defaultCenter.lng + 0.004,
                   }
                 )
-                // USERS.forEach((user) => {
-                //   bounds.extend(user.pos)
-                // })
                 map.fitBounds(bounds)
                 await new Promise((resolve) => setTimeout(resolve, 300))
                 setMap(map)
@@ -183,22 +174,12 @@ export default function MapPage({ isLoaded }: MapPageProps) {
                     isFocused={
                       focusItem?.type === 'warn' && warn.id === focusItem.id
                     }
-                    // onFocus={(value) => {
-                    //   if (value) {
-                    //     setFocusItem({ type: 'warn', id: warn.id })
-                    //   } else if (
-                    //     focusItem?.type === 'warn' &&
-                    //     focusItem.id === warn.id
-                    //   ) {
-                    //     setFocusItem(null)
-                    //   }
-                    // }}
                     onClick={() => setFocusItem({ type: 'warn', id: warn.id })}
                     warn
                   />
                 ))}
             </GoogleMap>
-            <div className="absolute inset-x-0 bottom-[72px] flex justify-end">
+            <div className="absolute inset-x-0 bottom-[86px] flex justify-end">
               <div className="flex space-x-4 overflow-x-scroll py-4 px-8 scrollbar-hidden">
                 {USERS.map((user) => (
                   <UserSelectButton
@@ -219,16 +200,19 @@ export default function MapPage({ isLoaded }: MapPageProps) {
           <div>Loading...</div>
         )}
       </div>
+
       <Drawer
         anchor="bottom"
         open={focusItem?.type === 'warn'}
         onClose={() => setFocusItem(null)}
         sx={{
           pointerEvents: 'none',
+          transitionDelay: 0,
           '& > .MuiBackdrop-root': {
             background: 'transparent',
           },
         }}
+        transitionDuration={{ appear: 200, enter: 200, exit: 200 }}
       >
         <Box sx={{ pointerEvents: 'auto' }}>
           <DangerousInformation
