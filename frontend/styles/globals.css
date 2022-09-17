@@ -51,28 +51,31 @@ select {
 }
 
 .cumtom-text-input {
-  outline-color: #FB9156;
+  outline-color: #fb9156;
   background: #f4f4f4;
   border-radius: 8px;
   width: 100%;
   border: none;
+  color: #333333;
   height: 40px;
 }
 .cumtom-textarea {
-  outline-color: #FB9156;
+  outline-color: #fb9156;
   background: #f4f4f4;
   border-radius: 8px;
   width: 100%;
   border: none;
   padding: 10px;
   height: 90px;
+  color: #333333;
 }
 
 .custom-select-button {
-  outline-color: #FB9156;
+  outline-color: #fb9156;
   border-radius: 8px;
   width: 100%;
   border: none;
+  color: #333333;
   height: 40px;
   -webkit-appearance: none;
   -moz-appearance: none;

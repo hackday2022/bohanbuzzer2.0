@@ -9,6 +9,8 @@ import { Button, Grid } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 
 export default function Custom2wayTextInput(props: any) {
+  const [edit, setEdit] = React.useState(0)
+  const [edit2, setEdit2] = React.useState(0)
   return (
     <div>
       <Card
@@ -38,38 +40,62 @@ export default function Custom2wayTextInput(props: any) {
                   caption={props.caption1}
                   placeholder={props.placeholder1}
                   onChange={props.onChange1}
+                  disable={edit === 0 ? true : false}
                 />
               </Grid>
               <Grid item xs={4}>
                 <Box mt={3}>
-                  <Button
-                    variant="outlined"
-                    onClick={() => console.log('')}
-                    sx={{
-                      boxShadow: 'None',
-                      border: '1px solid #C7C7C7',
-                      borderRadius: '8px',
-                      paddingTop: '12px',
-                      paddingBottom: '8px',
-                      paddingLeft: '15px',
-                      width: '100%',
-                    }}
-                  >
-                    <EditIcon
+                  {edit === 0 ? (
+                    <Button
+                      variant="outlined"
+                      onClick={() => setEdit(1)}
                       sx={{
-                        fontSize: 16,
-                        marginRight: '10px',
-                        marginBottom: '2px',
-                        color: '#333333',
+                        boxShadow: 'None',
+                        border: '1px solid #C7C7C7',
+                        borderRadius: '8px',
+                        paddingTop: '12px',
+                        paddingBottom: '8px',
+                        paddingLeft: '15px',
+                        width: '100%',
+                        bgcolor: '#FFF!important',
                       }}
-                    />
-                    <Typography
-                      variant="subtitle1"
-                      sx={{ color: 'text.secondary' }}
                     >
-                      編集
-                    </Typography>
-                  </Button>
+                      <EditIcon
+                        sx={{
+                          fontSize: 16,
+                          marginRight: '10px',
+                          marginBottom: '2px',
+                          color: '#333333',
+                        }}
+                      />
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ color: 'text.secondary' }}
+                      >
+                        編集
+                      </Typography>
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outlined"
+                      onClick={() => setEdit(0)}
+                      sx={{
+                        boxShadow: 'None',
+                        outlineColor: 'background.default',
+                        border: '1px solid #C7C7C7',
+                        borderRadius: '8px',
+                        paddingTop: '12px',
+                        paddingBottom: '8px',
+                        paddingLeft: '15px',
+                        width: '100%',
+                        bgcolor: '#FB9156!important',
+                      }}
+                    >
+                      <Typography variant="subtitle1" sx={{ color: 'white' }}>
+                        保存
+                      </Typography>
+                    </Button>
+                  )}
                 </Box>
               </Grid>
             </Grid>
@@ -82,38 +108,62 @@ export default function Custom2wayTextInput(props: any) {
                   placeholder={props.placeholder2}
                   selectList={props.listitem}
                   onChange={props.onChange2}
+                  disable={edit2 === 0 ? true : false}
                 />
               </Grid>
               <Grid item xs={4}>
                 <Box mt={3}>
-                  <Button
-                    variant="outlined"
-                    onClick={() => console.log('')}
-                    sx={{
-                      boxShadow: 'None',
-                      border: '1px solid #C7C7C7',
-                      borderRadius: '8px',
-                      paddingTop: '12px',
-                      paddingBottom: '8px',
-                      paddingLeft: '15px',
-                      width: '100%',
-                    }}
-                  >
-                    <EditIcon
+                  {edit2 === 0 ? (
+                    <Button
+                      variant="outlined"
+                      onClick={() => setEdit2(1)}
                       sx={{
-                        fontSize: 16,
-                        marginRight: '10px',
-                        marginBottom: '2px',
-                        color: '#333333',
+                        boxShadow: 'None',
+                        border: '1px solid #C7C7C7',
+                        borderRadius: '8px',
+                        paddingTop: '12px',
+                        paddingBottom: '8px',
+                        paddingLeft: '15px',
+                        width: '100%',
+                        bgcolor: '#FFF!important',
                       }}
-                    />
-                    <Typography
-                      variant="subtitle1"
-                      sx={{ color: 'text.secondary' }}
                     >
-                      編集
-                    </Typography>
-                  </Button>
+                      <EditIcon
+                        sx={{
+                          fontSize: 16,
+                          marginRight: '10px',
+                          marginBottom: '2px',
+                          color: '#333333',
+                        }}
+                      />
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ color: 'text.secondary' }}
+                      >
+                        編集
+                      </Typography>
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outlined"
+                      onClick={() => setEdit2(0)}
+                      sx={{
+                        boxShadow: 'None',
+                        outlineColor: 'background.default',
+                        border: '1px solid #C7C7C7',
+                        borderRadius: '8px',
+                        paddingTop: '12px',
+                        paddingBottom: '8px',
+                        paddingLeft: '15px',
+                        width: '100%',
+                        bgcolor: '#FB9156!important',
+                      }}
+                    >
+                      <Typography variant="subtitle1" sx={{ color: 'white' }}>
+                        保存
+                      </Typography>
+                    </Button>
+                  )}
                 </Box>
               </Grid>
             </Grid>
