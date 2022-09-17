@@ -10,8 +10,7 @@
     "lint:fix": "tslint pages/ --fix .gitignore",
     "format": "prettier . --check --ignore-path .gitignore",
     "format:fix": "prettier . --write --ignore-path .gitignore",
-    "fix": "tslint pages/ --fix .gitignore && prettier . --write --ignore-path .gitignore",
-    "prepare": "husky install"
+    "fix": "tslint pages/ --fix .gitignore && prettier . --write --ignore-path .gitignore"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
