@@ -67,6 +67,8 @@ const Setup: NextPage = () => {
                 />
               ) : (
                 <RegistrationDevice
+                  title="デバイスの設定"
+                  add={1}
                   deviceName={deviceName}
                   setDeviceName={setDeviceName}
                   deviceSirial={deviceSirial}
