@@ -33,11 +33,20 @@ const theme = createTheme({
       fontWeight: 700,
       textAlign: 'center',
     },
+    h2: {
+      fontSize: '20px',
+      fontWeight: 700,
+      lineHeight: '23px',
+      fontFamily: 'Helvetica',
+      textAlign: 'center',
+      color: '#333333',
+    },
     subtitle1: {
       fontStyle: 'normal',
       fontWeight: 700,
       fontSize: '14px',
       lineHeight: '16px',
+      color: '#333333',
       fontFamily: 'Helvetica',
     },
     subtitle2: {
@@ -47,6 +56,13 @@ const theme = createTheme({
       fontSize: '16px',
       lineHeight: '18px',
       color: '#707070',
+    },
+    caption: {
+      fontFamily: 'Helvetica',
+      fontStyle: 'normal',
+      fontWeight: 700,
+      fontSize: '12px',
+      lineHeight: '14px',
     },
   },
 })
