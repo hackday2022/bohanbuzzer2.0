@@ -38,7 +38,8 @@ export default function RegistrationDevice(props: any) {
           value={props.deviceSchool}
           onChange={(e: any) => props.setDeviceSchool(e.target.value)}
           placeholder="見守り幼稚園"
-          selectList={['見守り大学', '見守り大学院', '見守り研究室']}
+          selectList={props.schoolList}
+          disabled={props.fetchingSchools}
         />
       </Box>
       {props.add === 1 ? (
