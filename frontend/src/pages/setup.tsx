@@ -56,7 +56,7 @@ const Setup: NextPage = () => {
       [
         {
           name: deviceName,
-          deviceId: deviceSirial,
+          deviceId: deviceSirial.trim(),
           schoolId: schoolId,
         },
       ]
