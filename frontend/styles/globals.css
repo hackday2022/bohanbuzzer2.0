@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
@@ -215,7 +219,7 @@ select {
 }
 
 .segmented-button-custom {
-  bottom: 60px;
+  bottom: 24px;
   position: fixed;
   text-align: center;
   margin-left: auto;
@@ -264,4 +268,13 @@ video {
 .mimamori_setting_add_button {
   width: 90%;
   background-color: white;
+}
+
+/* For google map */
+.infoBox > img:first-child {
+  display: none;
+}
+
+.infoBox {
+  overflow: visible !important;
 }
