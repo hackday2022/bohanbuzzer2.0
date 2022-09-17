@@ -25,8 +25,6 @@ export default function NotificationPage(props: any) {
         sx={{
           bgcolor: '#F9F9F9',
           width: '100%',
-          height: '100vh',
-          overflow: 'hidden',
         }}
       >
         {registrate === 0 ? (
@@ -35,6 +33,7 @@ export default function NotificationPage(props: any) {
             alignItems="center"
             justifyContent="center"
             direction="column"
+            sx={{ pb: 20 }}
           >
             <Grid item xs={12}>
               <Box sx={{ mt: 5, mb: 5 }}>
@@ -57,6 +56,24 @@ export default function NotificationPage(props: any) {
                 resource="警視庁"
                 time="3時ごろ"
               />
+              <Box mt={2}>
+                <DangerousInformation
+                  date=""
+                  area="国会議事堂"
+                  content="痴漢事案およびストーカー事案。近くのPD至急対応に当たれ。"
+                  resource="警視庁"
+                  time="3時ごろ"
+                />
+              </Box>
+              <Box mt={2}>
+                <DangerousInformation
+                  date=""
+                  area="国会議事堂"
+                  content="痴漢事案およびストーカー事案。近くのPD至急対応に当たれ。"
+                  resource="警視庁"
+                  time="3時ごろ"
+                />
+              </Box>
             </Grid>
           </Grid>
         ) : (

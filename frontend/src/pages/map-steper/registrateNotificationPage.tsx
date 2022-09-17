@@ -7,7 +7,6 @@ import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
 
 export default function registrateNotificationPage(props: any) {
-  console.log(props)
   return (
     <div>
       <Container
@@ -15,7 +14,6 @@ export default function registrateNotificationPage(props: any) {
           bgcolor: '#F9F9F9',
           width: '100%',
           height: '100vh',
-          overflow: 'hidden',
         }}
       >
         <Grid

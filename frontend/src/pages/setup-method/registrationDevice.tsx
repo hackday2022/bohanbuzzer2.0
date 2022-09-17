@@ -14,7 +14,7 @@ export default function RegistrationDevice(props: any) {
   return (
     <div>
       <Typography variant="subtitle2" sx={{ textAlign: 'center' }}>
-        デバイスの設定
+        {props.title}
       </Typography>
       <Box mt={4} mb={3}>
         <CustomTextInput
@@ -41,27 +41,29 @@ export default function RegistrationDevice(props: any) {
           selectList={['見守り大学', '見守り大学院', '見守り研究室']}
         />
       </Box>
-      <Box mb={2}>
-        <Button
-          sx={{
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            textAlign: 'center',
-            width: '100%',
-          }}
-        >
-          <AddCircleOutlineIcon
-            sx={{ color: 'text.secondary', marginBottom: '2px' }}
-          />
-          <Typography
-            align="center"
-            variant="subtitle1"
-            sx={{ marginLeft: '10px', color: 'text.secondary' }}
+      {props.add === 1 ? (
+        <Box mb={2}>
+          <Button
+            sx={{
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              textAlign: 'center',
+              width: '100%',
+            }}
           >
-            デバイスを追加登録する
-          </Typography>
-        </Button>
-      </Box>
+            <AddCircleOutlineIcon
+              sx={{ color: 'text.secondary', marginBottom: '2px' }}
+            />
+            <Typography
+              align="center"
+              variant="subtitle1"
+              sx={{ marginLeft: '10px', color: 'text.secondary' }}
+            >
+              デバイスを追加登録する
+            </Typography>
+          </Button>
+        </Box>
+      ) : null}
     </div>
   )
 }
