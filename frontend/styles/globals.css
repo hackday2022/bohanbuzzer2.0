@@ -49,8 +49,9 @@ select {
   width: 100%;
   height: 100%;
 }
+
 .cumtom-text-input {
-  outline: none;
+  outline-color: #FB9156;
   background: #f4f4f4;
   border-radius: 8px;
   width: 100%;
@@ -58,7 +59,7 @@ select {
   height: 40px;
 }
 .cumtom-textarea {
-  outline: none;
+  outline-color: #FB9156;
   background: #f4f4f4;
   border-radius: 8px;
   width: 100%;
@@ -68,7 +69,7 @@ select {
 }
 
 .custom-select-button {
-  outline: none;
+  outline-color: #FB9156;
   border-radius: 8px;
   width: 100%;
   border: none;
