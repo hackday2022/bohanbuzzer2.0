@@ -61,6 +61,15 @@ select {
   border: none;
   height: 40px;
 }
+.cumtom-textarea {
+  outline: none;
+  background: #f4f4f4;
+  border-radius: 8px;
+  width: 100%;
+  border: none;
+  padding: 10px;
+  height: 90px;
+}
 
 .custom-select-button {
   outline: none;
@@ -207,7 +216,7 @@ select {
 
 .segmented-button-custom {
   bottom: 24px;
-  position: absolute;
+  position: fixed;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -250,6 +259,11 @@ video {
   text-align: center;
   margin-right: auto;
   margin-left: auto;
+}
+
+.mimamori_setting_add_button {
+  width: 90%;
+  background-color: white;
 }
 
 /* For google map */
