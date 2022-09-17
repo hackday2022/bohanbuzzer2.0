@@ -1,14 +1,14 @@
 import { CommonFirestore } from '@common'
-import { addDoc, collection, getDoc, doc } from 'firebase/firestore'
+import { setDoc, addDoc, collection, getDoc, doc } from 'firebase/firestore'
 import { db } from '~/firebase/init'
 import { Firestore } from '~/types'
 
 export const addParent = async (
-  parent: { name: string; area: string },
+  parent: { name: string; area: string; userId: string },
   children: { name: string; deviceId: string; schoolId: string }[]
 ) => {
-  const parentDoc = await addDoc(
-    collection(db, 'parents').withConverter(
+  await setDoc(
+    doc(db, 'parents', parent.userId).withConverter(
       Firestore.converter(CommonFirestore.Parent)
     ),
     {
@@ -35,7 +35,7 @@ export const addParent = async (
     }
 
     await addDoc(
-      collection(db, 'parents', parentDoc.id, 'children').withConverter(
+      collection(db, 'parents', parent.userId, 'children').withConverter(
         Firestore.converter(Firestore.Child)
       ),
       {
@@ -47,7 +47,6 @@ export const addParent = async (
   })
 
   return {
-    parentDocId: parentDoc.id,
     childrenDocIds: children.map((child) => child.deviceId),
   }
 }

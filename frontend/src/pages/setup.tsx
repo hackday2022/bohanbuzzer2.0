@@ -15,6 +15,7 @@ import RegistrationDevice from './setup-method/registrationDevice'
 import { useRouter } from 'next/router'
 import { addParent } from '~/lib/addParent'
 import { fetchSchools } from '~/lib/fetchSchools'
+import { useUser } from '~/lib/useUser'
 
 const Setup: NextPage = () => {
   const [page, setPage] = React.useState(0)
@@ -28,6 +29,8 @@ const Setup: NextPage = () => {
   )
 
   const [fetchingSchools, setFetchingSchools] = React.useState(false)
+
+  const { user } = useUser()
 
   useEffect(() => {
     ;(async () => {
@@ -48,10 +51,13 @@ const Setup: NextPage = () => {
     const schoolId = schools.find((school) => school.name === deviceSchool)?.id
     if (!schoolId) return
 
+    if (!user) return
+
     await addParent(
       {
         name,
         area,
+        userId: user.uid,
       },
       [
         {
