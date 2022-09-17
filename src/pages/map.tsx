@@ -8,18 +8,18 @@ import MapPage from '../pages/map-steper/mapPage'
 import FacePage from '../pages/map-steper/facePage'
 
 export default function Map() {
-  const [page, setPage] = React.useState(0)
+  const [page, setPage] = React.useState(1)
   return (
     <div>
-      {page === 0 ? (
+      {page === 1 ? (
         <MapPage />
-      ) : page === 1 ? (
+      ) : page === 2 ? (
         <NotificationPage />
       ) : (
         <FacePage />
       )}
       <SegmentedButton
-        onChange={(e: any) => setPage(e.target.value)}
+        onChange={setPage}
         className="segmented-button-custom"
         list={[
           {
@@ -35,7 +35,7 @@ export default function Map() {
                 key="1"
               />
             ),
-            value: 'map',
+            value: 1,
           },
           {
             label: (
@@ -50,7 +50,7 @@ export default function Map() {
                 key="2"
               />
             ),
-            value: 'notification',
+            value: 2,
           },
           {
             label: (
@@ -65,7 +65,7 @@ export default function Map() {
                 key="3"
               />
             ),
-            value: 'face',
+            value: 3,
           },
         ]}
       />
