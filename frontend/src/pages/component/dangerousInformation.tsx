@@ -13,7 +13,7 @@ export default function DangerousInformation(props: any) {
     <div>
       <Box mb={1} ml={3}>
         <Typography align="left" variant="h2">
-          9月12日
+          {props.date}
         </Typography>
       </Box>
       <Card

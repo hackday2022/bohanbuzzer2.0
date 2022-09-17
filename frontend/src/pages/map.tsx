@@ -6,15 +6,17 @@ import FaceIcon from '@mui/icons-material/Face'
 import NotificationPage from '../pages/map-steper/notificationPage'
 import MapPage from '../pages/map-steper/mapPage'
 import FacePage from '../pages/map-steper/facePage'
+import { useRouter } from 'next/router'
 
 export default function Map() {
+  const router = useRouter()
   const [page, setPage] = React.useState(1)
   return (
     <div>
       {page === 1 ? (
         <MapPage />
       ) : page === 2 ? (
-        <NotificationPage />
+        <NotificationPage router={router} />
       ) : (
         <FacePage />
       )}
