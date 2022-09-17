@@ -201,21 +201,6 @@ export default function MapPage({ isLoaded }: MapPageProps) {
         )}
       </div>
 
-      <Box sx={{ pointerEvents: 'auto' }}>
-        <DangerousInformation
-          date="2月14日"
-          area="国会議事堂"
-          content="痴漢事案およびストーカー事案。近くのPD至急対応に当たれ。"
-          resource="警視庁"
-          time="3時ごろ"
-          hideDate
-          icon={
-            <IconButton onClick={() => setFocusItem(null)}>
-              <CloseRoundedIcon sx={{ color: 'black' }} />
-            </IconButton>
-          }
-        />
-      </Box>
       <Drawer
         anchor="bottom"
         open={focusItem?.type === 'warn'}
