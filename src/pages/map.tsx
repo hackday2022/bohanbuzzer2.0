@@ -3,12 +3,23 @@ import SegmentedButton from '../pages/component/segmentControlButton'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import FaceIcon from '@mui/icons-material/Face'
+import NotificationPage from '../pages/map-steper/notificationPage'
+import MapPage from '../pages/map-steper/mapPage'
+import FacePage from '../pages/map-steper/facePage'
 
 export default function Map() {
+  const [page, setPage] = React.useState(0)
   return (
     <div>
+      {page === 0 ? (
+        <MapPage />
+      ) : page === 1 ? (
+        <NotificationPage />
+      ) : (
+        <FacePage />
+      )}
       <SegmentedButton
-        value={'1'}
+        onChange={(e: any) => setPage(e.target.value)}
         className="segmented-button-custom"
         list={[
           {
