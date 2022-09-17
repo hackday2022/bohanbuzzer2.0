@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import SpotIcon from '../../component/SpotIcon'
 import { GoogleMap } from '@react-google-maps/api'
 import UserSelectButton from '../../component/UserSelectButton'
 import DangerousInformation from '../component/dangerousInformation'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { Box, IconButton, Drawer } from '@mui/material'
+import { fetchTweetWarnings, TweetWarning, Warning } from '~/lib/fetchWaning'
+import { useOnSnapshot } from '~/lib/useOnSnapshot'
 
 export type MapPageProps = {
   isLoaded: boolean
@@ -68,49 +70,48 @@ const USERS = [
   },
 ]
 
-const WARNS = [
-  {
-    id: '1',
-    title: '下校途中の女児を追いかけた。',
-    address: '八代市古城町付近',
-    time: '15時過ぎ',
-    source: '日本不審者情報センター（Twitter）',
-    pos: {
-      lat: 35.6916,
-      lng: 139.704,
-    },
-  },
-]
-
 export default function MapPage({ isLoaded }: MapPageProps) {
+  const warnings = useOnSnapshot(fetchTweetWarnings, {})
+
   const [map, setMap] = useState<google.maps.Map | null>(null)
 
-  const [focusItem, setFocusItem] = useState<{
+  const [focusItemId, setFocusItemId] = useState<{
     id: string
     type: 'user' | 'warn'
   } | null>({ type: 'user', id: USERS[0].id })
+
   const [isFirstUpdate, setIsFirstUpdate] = useState(false)
 
-  const onUnmount = () => setMap(null)
-
-  useEffect(() => {
-    if (!isLoaded || map == null || focusItem == null) {
-      return
+  const focusItem = useMemo(() => {
+    if (focusItemId == null) {
+      return null
     }
-
     const array =
-      focusItem.type === 'user'
+      focusItemId.type === 'user'
         ? (USERS as {
             id: string
             pos: google.maps.LatLngLiteral
           }[])
-        : (WARNS as {
+        : (warnings.map(({ id, longitude, latitude }) => ({
+            id,
+            pos: { lng: longitude, lat: latitude },
+          })) as {
             id: string
             pos: google.maps.LatLngLiteral
           }[])
 
-    const targetPos = array.find(({ id }) => id === focusItem.id)?.pos
-    if (targetPos == null) {
+    return array.find(({ id }) => id === focusItemId.id) ?? null
+  }, [focusItemId, warnings])
+
+  const tweetWarningFocusItem = useMemo(() => {
+    if (focusItemId == null) {
+      return null
+    }
+    return warnings.find(({ id }) => id === focusItemId.id) ?? null
+  }, [warnings, focusItemId])
+
+  useEffect(() => {
+    if (!isLoaded || map == null || focusItem == null) {
       return
     }
 
@@ -118,9 +119,11 @@ export default function MapPage({ isLoaded }: MapPageProps) {
       setIsFirstUpdate(true)
       return
     }
-    map.setZoom(18)
-    map.panTo(targetPos)
-  }, [focusItem, isLoaded, map, isFirstUpdate])
+    // map.setZoom(18)
+    map.panTo(focusItem.pos)
+  }, [focusItemId, isLoaded, map, isFirstUpdate])
+
+  const onUnmount = () => setMap(null)
 
   return (
     <>
@@ -158,38 +161,43 @@ export default function MapPage({ isLoaded }: MapPageProps) {
                     key={user.id}
                     latLng={user.pos}
                     isFocused={
-                      focusItem?.type === 'user' && user.id === focusItem.id
+                      focusItemId?.type === 'user' && user.id === focusItemId.id
                     }
                     onClick={() => {
-                      setFocusItem({ type: 'user', id: user.id })
+                      setFocusItemId({ type: 'user', id: user.id })
                     }}
                     iconUrl={user.iconUrl}
                   />
                 ))}
               {map != null &&
-                WARNS.map((warn) => (
-                  <SpotIcon
-                    key={warn.id}
-                    latLng={warn.pos}
-                    isFocused={
-                      focusItem?.type === 'warn' && warn.id === focusItem.id
-                    }
-                    onClick={() => setFocusItem({ type: 'warn', id: warn.id })}
-                    warn
-                  />
-                ))}
+                warnings
+                  .filter((warn) => 'tweet_time' in warn)
+                  .map((warn) => (
+                    <SpotIcon
+                      key={warn.id}
+                      latLng={{ lat: warn.latitude, lng: warn.longitude }}
+                      isFocused={
+                        focusItemId?.type === 'warn' &&
+                        warn.id === focusItemId.id
+                      }
+                      onClick={() =>
+                        setFocusItemId({ type: 'warn', id: warn.id })
+                      }
+                      warn
+                    />
+                  ))}
             </GoogleMap>
             <div className="absolute inset-x-0 bottom-[86px] flex justify-end">
-              <div className="flex space-x-4 overflow-x-scroll py-4 px-8 scrollbar-hidden">
+              <div className="flex px-8 py-4 space-x-4 overflow-x-scroll scrollbar-hidden">
                 {USERS.map((user) => (
                   <UserSelectButton
                     key={user.id}
                     user={user}
                     isSelected={
-                      focusItem?.type === 'user' && focusItem.id === user.id
+                      focusItemId?.type === 'user' && focusItemId.id === user.id
                     }
                     onSelect={() => {
-                      setFocusItem({ type: 'user', id: user.id })
+                      setFocusItemId({ type: 'user', id: user.id })
                     }}
                   />
                 ))}
@@ -203,8 +211,8 @@ export default function MapPage({ isLoaded }: MapPageProps) {
 
       <Drawer
         anchor="bottom"
-        open={focusItem?.type === 'warn'}
-        onClose={() => setFocusItem(null)}
+        open={tweetWarningFocusItem != null}
+        onClose={() => setFocusItemId(null)}
         sx={{
           pointerEvents: 'none',
           transitionDelay: 0,
@@ -215,19 +223,21 @@ export default function MapPage({ isLoaded }: MapPageProps) {
         transitionDuration={{ appear: 200, enter: 200, exit: 200 }}
       >
         <Box sx={{ pointerEvents: 'auto' }}>
-          <DangerousInformation
-            date="2月14日"
-            area="国会議事堂"
-            content="痴漢事案およびストーカー事案。近くのPD至急対応に当たれ。"
-            resource="警視庁"
-            time="3時ごろ"
-            hideDate
-            icon={
-              <IconButton onClick={() => setFocusItem(null)}>
-                <CloseRoundedIcon sx={{ color: 'black' }} />
-              </IconButton>
-            }
-          />
+          {tweetWarningFocusItem != null && (
+            <DangerousInformation
+              date={tweetWarningFocusItem.tweet_time}
+              area={[tweetWarningFocusItem.title].flat(2).join(',')}
+              content={tweetWarningFocusItem.body}
+              resource={tweetWarningFocusItem.source}
+              time={tweetWarningFocusItem.tweet_time.toString()}
+              hideDate
+              icon={
+                <IconButton onClick={() => setFocusItemId(null)}>
+                  <CloseRoundedIcon sx={{ color: 'black' }} />
+                </IconButton>
+              }
+            />
+          )}
         </Box>
       </Drawer>
     </>

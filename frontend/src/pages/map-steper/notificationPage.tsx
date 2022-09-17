@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
@@ -13,6 +13,8 @@ import CompleteButton from '../component/completeButton'
 import CustomAutoComplete from '../component/customAutoComplete'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import CustomLargeTextInput from '../component/customLargeTextInput'
+import { fetchWarnings, TweetWarning } from '~/lib/fetchWaning'
+import { useOnSnapshot } from '~/lib/useOnSnapshot'
 
 export default function NotificationPage(props: any) {
   const [registrate, setRegistrate] = React.useState(0)
@@ -20,6 +22,20 @@ export default function NotificationPage(props: any) {
   const [dangerouserea, setDangerousarea] = React.useState('')
   const [dangerouscontent, setDangerouscontent] = React.useState('')
   const [dangeroustime, setDangeroustime] = React.useState('')
+
+  const warnings = useOnSnapshot(fetchWarnings, {
+    // TODO: set correct value
+    userId: 'abc',
+    schoolId: 'abc',
+  })
+
+  const tweetWarnings = useMemo(() =>
+    warnings.filter(
+      (warning): warning is TweetWarning => 'tweet_time' in warning,
+      [warnings]
+    )
+  )
+
   return (
     <div>
       <Container
@@ -50,31 +66,21 @@ export default function NotificationPage(props: any) {
                   />
                 </IconButton>
               </Box>
-              <DangerousInformation
-                date="2月14日"
-                area="国会議事堂"
-                content="痴漢事案およびストーカー事案。近くのPD至急対応に当たれ。"
-                resource="警視庁"
-                time="3時ごろ"
-              />
-              <Box mt={2}>
-                <DangerousInformation
-                  date=""
-                  area="国会議事堂"
-                  content="痴漢事案およびストーカー事案。近くのPD至急対応に当たれ。"
-                  resource="警視庁"
-                  time="3時ごろ"
-                />
-              </Box>
-              <Box mt={2}>
-                <DangerousInformation
-                  date=""
-                  area="国会議事堂"
-                  content="痴漢事案およびストーカー事案。近くのPD至急対応に当たれ。"
-                  resource="警視庁"
-                  time="3時ごろ"
-                />
-              </Box>
+              {tweetWarnings.map((warning, i) => (
+                <Box key={warning.id} mb={2}>
+                  <DangerousInformation
+                    date={warning.tweet_time}
+                    area={warning.title}
+                    content={warning.body}
+                    resource={warning.source}
+                    time=""
+                    hideDate={
+                      warning.tweet_time.getTime() ===
+                      tweetWarnings[i - 1]?.tweet_time?.getTime()
+                    }
+                  />
+                </Box>
+              ))}
             </Grid>
           </Grid>
         ) : (

@@ -93,8 +93,10 @@ export default function FacePage(props: any) {
           ) : (
             <Card
               sx={{
+                position: 'fixed',
+                bottom: 0,
                 width: '90vw',
-                height: '90vh',
+                height: '85dvh',
                 boxShadow: '0px 1px 8px rgba(0, 0, 0, 0.1)',
                 borderRadius: '24px 24px 0px 0px',
                 zIndex: 1,

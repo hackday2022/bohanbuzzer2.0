@@ -43,15 +43,28 @@ export namespace CommonFirestore {
     });
 
   export const getWarning = <T extends t.Mixed>(timestamp: T) =>
-    t.type({
-      title: t.string,
-      body: t.string,
-      longitute: t.number,
-      latitude: t.number,
-      since: timestamp,
-      until: timestamp,
-      source: t.string,
-    });
+    t.union([
+      // NOTE: Via twitter
+      t.type({
+        title: t.string,
+        body: t.string,
+        longitude: t.number,
+        latitude: t.number,
+        source: t.string,
+        address: t.string,
+        tweet_time: timestamp,
+      }),
+      // NOTE: Via weather
+      t.type({
+        title: t.array(t.string),
+        body: t.string,
+        longitude: t.number,
+        latitude: t.number,
+        since: timestamp,
+        source: t.string,
+        city: t.string,
+      }),
+    ]);
 }
 
 export namespace CommonFunctions {
