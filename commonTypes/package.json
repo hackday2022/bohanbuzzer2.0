@@ -1,0 +1,18 @@
+{
+  "name": "commontypes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --check \"src/**/*.ts\"",
+    "format:fix": "prettier --write \"src/**/*.ts\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "io-ts": "^2.2.18"
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1"
+  }
+}
