@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { throttle } from 'throttle-debounce'
 import SpotIcon from '../../component/SpotIcon'
 import { GoogleMap } from '@react-google-maps/api'
 import UserSelectButton from '../../component/UserSelectButton'
 
 export type MapPageProps = {
   isLoaded: boolean
+}
+
+const defaultCenter = {
+  lat: 35.6896,
+  lng: 139.7006,
 }
 
 const USERS = [
@@ -63,10 +67,9 @@ const USERS = [
 
 export default function MapPage({ isLoaded }: MapPageProps) {
   const [map, setMap] = useState<google.maps.Map | null>(null)
-  // const [center, setCenter] = useState<google.maps.LatLngLiteral>(USERS[0].pos)
-  // const [zoom, setZoom] = useState(18)
 
   const [focusItemId, setFocusItemId] = useState<string | null>(USERS[0].id)
+  const [isFirstUpdate, setIsFirstUpdate] = useState(false)
 
   const onUnmount = () => setMap(null)
 
@@ -79,53 +82,65 @@ export default function MapPage({ isLoaded }: MapPageProps) {
       return
     }
 
+    if (isFirstUpdate) {
+      setIsFirstUpdate(true)
+      return
+    }
     map.setZoom(18)
     map.panTo(user.pos)
-  }, [focusItemId, isLoaded])
+  }, [focusItemId, isLoaded, map, isFirstUpdate])
+
+  console.log(focusItemId)
 
   return (
     <div className="w-screen h-screen relative">
       {isLoaded ? (
         <>
           <GoogleMap
-            center={USERS[0].pos}
-            onCenterChanged={throttle(200, () => {
-              console.log('CENTER', map?.getCenter()?.toJSON())
-              const center = map?.getCenter()?.toJSON()
-              if (center != null) {
-                // setCenter(center)
-              }
-            })}
+            center={defaultCenter}
             zoom={18}
-            onZoomChanged={throttle(200, () => {
-              console.log('CENTER', map?.getZoom())
-              const zoom = map?.getZoom()
-              if (zoom != null) {
-                // setZoom(zoom)
-              }
-            })}
             options={{
               disableDefaultUI: true,
             }}
-            onLoad={setMap}
+            onLoad={async (map) => {
+              // console.log(window.innerWidth, window.innerHeight)
+              // const wlh = window.innerWidth / window.innerHeight
+              const bounds = new window.google.maps.LatLngBounds(
+                {
+                  lat: defaultCenter.lat - 0.004,
+                  lng: defaultCenter.lng - 0.004,
+                },
+                {
+                  lat: defaultCenter.lat + 0.004,
+                  lng: defaultCenter.lng + 0.004,
+                }
+              )
+              // USERS.forEach((user) => {
+              //   bounds.extend(user.pos)
+              // })
+              map.fitBounds(bounds)
+              await new Promise((resolve) => setTimeout(resolve, 300))
+              setMap(map)
+            }}
             onUnmount={onUnmount}
             mapContainerClassName="w-full h-full focus:outline-none"
           >
-            {USERS.map((user) => (
-              <SpotIcon
-                key={user.id}
-                latLng={user.pos}
-                isFocused={user.id === focusItemId}
-                onFocus={(value) => {
-                  if (value) {
-                    setFocusItemId(user.id)
-                  } else if (focusItemId === user.id) {
-                    setFocusItemId(null)
-                  }
-                }}
-                iconUrl={user.iconUrl}
-              />
-            ))}
+            {map != null &&
+              USERS.map((user) => (
+                <SpotIcon
+                  key={user.id}
+                  latLng={user.pos}
+                  isFocused={user.id === focusItemId}
+                  onFocus={(value) => {
+                    if (value) {
+                      setFocusItemId(user.id)
+                    } else if (focusItemId === user.id) {
+                      setFocusItemId(null)
+                    }
+                  }}
+                  iconUrl={user.iconUrl}
+                />
+              ))}
           </GoogleMap>
           <div className="absolute inset-x-0 bottom-[80px] flex space-x-4 overflow-x-scroll py-4 px-8 justify-end">
             {USERS.map((user) => (

@@ -1,25 +1,22 @@
-import { Circle, InfoBox } from '@react-google-maps/api'
-import React from 'react'
+import { CircleF, InfoBox } from '@react-google-maps/api'
+import React, { useMemo } from 'react'
 import classNames from 'classnames'
 
 const circleOption: google.maps.CircleOptions = {
   fillColor: '#FB9156',
   fillOpacity: 0.4,
   strokeColor: '#FB9156',
-  strokeOpacity: 0,
+  strokeOpacity: 0.4,
   clickable: false,
   draggable: false,
   editable: false,
   visible: true,
   radius: 30,
-  zIndex: 2,
+  zIndex: 1,
 }
 
 export type SpotIconProps = {
-  latLng: {
-    lat: number
-    lng: number
-  }
+  latLng: google.maps.LatLngLiteral
   isFocused: boolean
   onFocus: (value: boolean) => void
 } & {
@@ -27,18 +24,19 @@ export type SpotIconProps = {
 }
 
 const SpotIcon: React.FC<SpotIconProps> = ({
-  latLng,
+  latLng: latLngLiteral,
   isFocused,
   onFocus,
   iconUrl,
 }) => {
+  const latLng = useMemo(
+    () => new google.maps.LatLng(latLngLiteral),
+    [latLngLiteral]
+  )
   return (
     <>
-      <Circle
-        center={latLng as unknown as google.maps.LatLng}
-        options={circleOption}
-      />
-      <InfoBox position={latLng as unknown as google.maps.LatLng}>
+      <CircleF center={latLng} options={circleOption} />
+      <InfoBox position={latLng}>
         <div className="p-4 w-max -translate-x-1/2 -translate-y-1/2">
           <button
             className={classNames(
