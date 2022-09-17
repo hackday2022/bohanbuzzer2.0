@@ -251,3 +251,12 @@ video {
   margin-right: auto;
   margin-left: auto;
 }
+
+/* For google map */
+.infoBox > img:first-child {
+  display: none;
+}
+
+.infoBox {
+  overflow: visible !important;
+}

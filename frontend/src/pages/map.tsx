@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SegmentedButton from '../pages/component/segmentControlButton'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
@@ -6,13 +6,19 @@ import FaceIcon from '@mui/icons-material/Face'
 import NotificationPage from '../pages/map-steper/notificationPage'
 import MapPage from '../pages/map-steper/mapPage'
 import FacePage from '../pages/map-steper/facePage'
+import { useJsApiLoader } from '@react-google-maps/api'
 
 export default function Map() {
-  const [page, setPage] = React.useState(1)
+  const [page, setPage] = useState(1)
+  const { isLoaded, loadError } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
+  })
+
   return (
     <div>
       {page === 1 ? (
-        <MapPage />
+        <MapPage isLoaded={isLoaded} />
       ) : page === 2 ? (
         <NotificationPage />
       ) : (
