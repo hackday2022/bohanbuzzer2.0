@@ -12,6 +12,7 @@ import CustomTextInput from '../component/customTextInput'
 import CompleteButton from '../component/completeButton'
 import CustomAutoComplete from '../component/customAutoComplete'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
+import CustomLargeTextInput from '../component/customLargeTextInput'
 
 export default function NotificationPage(props: any) {
   const [registrate, setRegistrate] = React.useState(0)
@@ -149,6 +150,10 @@ export default function NotificationPage(props: any) {
                       </Grid>
                     </Grid>
                   </Box>
+                  <CustomLargeTextInput
+                    caption="詳細"
+                    placeholder="不審者情報"
+                  />
                   <CustomAutoComplete
                     caption="警戒期間"
                     value={props.deviceSchool}

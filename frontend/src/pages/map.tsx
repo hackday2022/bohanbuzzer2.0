@@ -4,7 +4,8 @@ import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import FaceIcon from '@mui/icons-material/Face'
 import NotificationPage from '../pages/map-steper/notificationPage'
-import MapPage from '../pages/map-steper/mapPage'
+// ☟サンプルになっているので注意
+import MapPage from '../pages/map-steper/mapPageSample'
 import FacePage from '../pages/map-steper/facePage'
 import { useRouter } from 'next/router'
 
