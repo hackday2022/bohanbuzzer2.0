@@ -8,44 +8,61 @@ import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded'
 import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded'
 
-export default function DangerousInformation(props: any) {
+export type DangerousInformationProps = {
+  date: string
+  area: string
+  content: string
+  time: string
+  resource: string
+  hideDate?: boolean
+  icon?: React.ReactElement
+}
+
+export default function DangerousInformation(props: DangerousInformationProps) {
   return (
     <div>
-      <Box mb={1} ml={3}>
-        <Typography align="left" variant="h2">
-          {props.date}
-        </Typography>
-      </Box>
+      {!props.hideDate && (
+        <Box mb={1} ml={3}>
+          <Typography align="left" variant="h2">
+            {props.date}
+          </Typography>
+        </Box>
+      )}
       <Card
         sx={{
-          width: '90vw',
+          width: '100%',
           boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.1)',
           borderRadius: '24px',
           zIndex: 1,
         }}
       >
         <CardContent>
-          <ErrorIcon sx={{ color: '#FF6464', fontSize: '27px' }} />
-          <Typography
-            variant="subtitle2"
-            sx={{
-              ml: 1,
-              pb: 1,
-              display: 'inline',
-              verticalAlign: '8px',
-              color: '#333333',
-            }}
-          >
-            {props.area}
-          </Typography>
-          <MapOutlinedIcon
-            sx={{
-              color: '#333333',
-              fontSize: '27px',
-              float: 'right',
-              marginRight: '15px',
-            }}
-          />
+          <Box sx={{ display: 'flex', alignItems: 'center', pb: 1 }}>
+            <ErrorIcon sx={{ color: '#FF6464', fontSize: '27px' }} />
+            <Typography
+              variant="subtitle2"
+              sx={{
+                ml: 1,
+
+                display: 'inline',
+                verticalAlign: '8px',
+                color: '#333333',
+              }}
+            >
+              {props.area}
+            </Typography>
+            <Box sx={{ marginLeft: 'auto' }}>
+              {props.icon ?? (
+                <MapOutlinedIcon
+                  sx={{
+                    color: '#333333',
+                    fontSize: '27px',
+                    float: 'right',
+                  }}
+                />
+              )}
+            </Box>
+          </Box>
           <Box ml={1}>
             <Typography
               variant="subtitle1"
