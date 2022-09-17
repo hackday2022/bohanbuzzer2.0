@@ -17,6 +17,7 @@ export default function CustomTextInput(props: any) {
         value={props.value}
         placeholder={props.placeholder}
         onChange={props.onChange}
+        disabled={props.disable ? true : false}
       />
     </div>
   )
