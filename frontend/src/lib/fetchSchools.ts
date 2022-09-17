@@ -19,5 +19,5 @@ export const fetchSchools = async () => {
 
   const doc = await getDocs(q)
 
-  return doc.docs.map((doc) => doc.data())
+  return doc.docs.map((doc) => ({ id: doc.id, name: doc.data().name }))
 }

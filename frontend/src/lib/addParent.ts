@@ -35,7 +35,7 @@ export const addParent = async (
     }
 
     await addDoc(
-      collection(db, `parents/${parentDoc.id}`).withConverter(
+      collection(db, 'parents', parentDoc.id, 'children').withConverter(
         Firestore.converter(Firestore.Child)
       ),
       {

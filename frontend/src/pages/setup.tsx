@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import React from 'react'
+import React, { useEffect } from 'react'
 // import Head from 'next/head'
 // import Image from 'next/image'
 import '../firebase/init'
@@ -13,6 +13,8 @@ import CompleteButton from './component/completeButton'
 import RegistrationProfile from './setup-method/registrationProfile'
 import RegistrationDevice from './setup-method/registrationDevice'
 import { useRouter } from 'next/router'
+import { addParent } from '~/lib/addParent'
+import { fetchSchools } from '~/lib/fetchSchools'
 
 const Setup: NextPage = () => {
   const [page, setPage] = React.useState(0)
@@ -21,7 +23,50 @@ const Setup: NextPage = () => {
   const [deviceName, setDeviceName] = React.useState('')
   const [deviceSchool, setDeviceSchool] = React.useState('')
   const [deviceSirial, setDeviceSirial] = React.useState('')
+  const [schools, setSchools] = React.useState<{ id: string; name: string }[]>(
+    []
+  )
+
+  const [fetchingSchools, setFetchingSchools] = React.useState(false)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        setFetchingSchools(true)
+        const schoolList = await fetchSchools()
+        setSchools(schoolList)
+        setDeviceSchool(schoolList[0].name)
+        setFetchingSchools(false)
+      } catch (e) {
+        console.error(e)
+        setFetchingSchools(false)
+      }
+    })()
+  }, [])
+
+  const handleCompletedButton = async () => {
+    const schoolId = schools.find((school) => school.name === deviceSchool)?.id
+    if (!schoolId) return
+
+    await addParent(
+      {
+        name,
+        area,
+      },
+      [
+        {
+          name: deviceName,
+          deviceId: deviceSirial,
+          schoolId: schoolId,
+        },
+      ]
+    )
+
+    router.push('/map')
+  }
+
   const router = useRouter()
+
   return (
     <Container
       sx={{
@@ -75,6 +120,8 @@ const Setup: NextPage = () => {
                   setDeviceSirial={setDeviceSirial}
                   deviceSchool={deviceSchool}
                   setDeviceSchool={setDeviceSchool}
+                  schoolList={schools.map((school) => school.name)}
+                  fetchingSchools={fetchingSchools}
                 />
               )}
               <Box mb={2}>
@@ -88,7 +135,7 @@ const Setup: NextPage = () => {
                   <CompleteButton
                     mode="light"
                     name="完了"
-                    onClick={() => router.push('/map')}
+                    onClick={handleCompletedButton}
                   />
                 )}
               </Box>
