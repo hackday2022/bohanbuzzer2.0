@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app'
+import { getFirestore } from 'firebase/firestore'
 
 // 実務ではこんなことすると怒られますがハッカソンなので許容すべき
+
 const firebaseConfig = {
   apiKey: 'AIzaSyDnWbUlIl7hNhxByqCykUzj4i08ADEKjLU',
   authDomain: 'hackday-2022-126c3.firebaseapp.com',
@@ -11,3 +13,5 @@ const firebaseConfig = {
 }
 
 export const app = initializeApp(firebaseConfig)
+
+export const db = getFirestore(app)

@@ -10,6 +10,7 @@ export namespace CommonFirestore {
     t.type({
       name: t.string,
       deviceRef: documentReference,
+      schoolRef: documentReference,
     });
 
   export const getAlertHistory = <T extends t.Mixed>(timestamp: T) =>
@@ -39,6 +40,17 @@ export namespace CommonFirestore {
   export const getDevice = <T extends t.Mixed>(timestamp: T) =>
     t.type({
       gpsLogs: t.array(getGps(timestamp)),
+    });
+
+  export const getWarning = <T extends t.Mixed>(timestamp: T) =>
+    t.type({
+      title: t.string,
+      body: t.string,
+      longitute: t.number,
+      latitude: t.number,
+      since: timestamp,
+      until: timestamp,
+      source: t.string,
     });
 }
 
