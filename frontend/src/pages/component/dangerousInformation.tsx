@@ -7,9 +7,10 @@ import ErrorIcon from '@mui/icons-material/Error'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded'
 import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded'
+import { formatDistanceToNow, formatDate } from '~/lib/dateUtil'
 
 export type DangerousInformationProps = {
-  date: string
+  date: Date
   area: string
   content: string
   time: string
@@ -24,7 +25,7 @@ export default function DangerousInformation(props: DangerousInformationProps) {
       {!props.hideDate && (
         <Box mb={1} ml={3}>
           <Typography align="left" variant="h2">
-            {props.date}
+            {formatDate(props.date)}
           </Typography>
         </Box>
       )}
@@ -86,7 +87,7 @@ export default function DangerousInformation(props: DangerousInformationProps) {
                   color: 'text.secondary',
                 }}
               >
-                {props.time}
+                {formatDistanceToNow(props.date)}
               </Typography>
               <Box mt={0}>
                 <LanguageRoundedIcon

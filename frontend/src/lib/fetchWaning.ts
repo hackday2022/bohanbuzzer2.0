@@ -1,54 +1,125 @@
 import {
   collection,
+  collectionGroup,
   getDocs,
+  limit,
+  onSnapshot,
   orderBy,
   query,
   Timestamp,
-  where,
+  Unsubscribe,
 } from 'firebase/firestore'
 import { Firestore } from '~/types'
 import { db } from '~/firebase/init'
+import * as t from 'io-ts'
 
-type Warning = {
-  title: string
-  latitude: number
-  longitute: number
-  body: string
-  since: Date
-  until: Date
+export type Warning = typeof Firestore.Warning extends t.Type<
+  infer A extends Record<string, unknown>
+>
+  ? {
+      [Key in keyof A]: A[Key] extends Timestamp ? Date : A[Key]
+    } & {
+      id: string
+    }
+  : never
+
+export type TweetWarning = Warning & { tweet_time: Date }
+export type WeatherWarning = Warning & { city: string }
+
+type FetchWarningsParam = {
+  userId: string
+  schoolId: string
 }
 
-export const fetchWarnings = async (userId: string, schoolId: string) => {
+export const fetchWarnings = (
+  { userId, schoolId }: FetchWarningsParam,
+  onUpdate: (warnings: Warning[]) => void
+): Unsubscribe => {
   const collectionPaths = [
     `parents/${userId}/warnings`,
     `schools/${schoolId}/warnings`,
-    `public/warnings`,
+    `public`,
   ]
 
-  const warnings = await Promise.all(
-    await collectionPaths.reduce<Promise<Warning[]>>(
-      async (acc, collectionPath) => {
-        const q = query(
-          collection(db, collectionPath).withConverter(
-            Firestore.converter(Firestore.Warning)
-          ),
-          orderBy('until', 'desc'),
-          where('until', '>', Timestamp.now())
-        )
-
-        const querySnapshot = await getDocs(q)
-
-        const newWarning = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          since: doc.data().since.toDate(),
-          until: doc.data().until.toDate(),
-        }))
-
-        return [...(await acc), ...newWarning]
-      },
-      Promise.resolve([])
+  // const res = await Promise.all(
+  const unsubscribes = collectionPaths.map((collectionPath) => {
+    const q = query(
+      collection(db, collectionPath).withConverter(
+        Firestore.converter(Firestore.Warning)
+      ),
+      // TODO: temporary comment out
+      // orderBy('until', 'desc'),
+      // where('until', '>', Timestamp.now())
+      limit(30)
     )
+
+    // const querySnapshot = await getDocs(q)
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const warnings: Warning[] = []
+      querySnapshot.forEach((doc) => {
+        const data = doc.data()
+        if ('tweet_time' in data) {
+          warnings.push({
+            id: doc.id,
+            ...data,
+            tweet_time: data.tweet_time.toDate(),
+          })
+        } else {
+          warnings.push({
+            id: doc.id,
+            ...data,
+            since: data.since.toDate(),
+          })
+        }
+      })
+      onUpdate(warnings)
+    })
+
+    return unsubscribe
+  })
+
+  const unsubscribe = () => {
+    unsubscribes.forEach((unsubscribe) => unsubscribe())
+  }
+
+  return unsubscribe
+}
+
+type FetchTweetWarningsParam = Record<string, never>
+
+export const fetchTweetWarnings = (
+  {}: FetchTweetWarningsParam,
+  onUpdate: (warnings: TweetWarning[]) => void
+): Unsubscribe => {
+  const q = query(
+    collection(db, 'public').withConverter(
+      Firestore.converter(Firestore.Warning)
+    ),
+    // TODO: temporary comment out
+    // where('until', '>', Timestamp.now())
+    orderBy('tweet_time', 'desc'),
+    // where('tweet_time', '!=', null),
+    limit(30)
   )
 
-  return warnings
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const warnings: TweetWarning[] = []
+    querySnapshot.forEach((doc) => {
+      const data = doc.data()
+      if ('tweet_time' in data) {
+        warnings.push({
+          id: doc.id,
+          ...data,
+          tweet_time: data.tweet_time.toDate(),
+        })
+      }
+    })
+
+    console.log(warnings)
+
+    onUpdate(warnings)
+  })
+
+  return unsubscribe
 }
