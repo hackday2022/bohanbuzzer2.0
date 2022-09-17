@@ -8,7 +8,7 @@ export default function ReadCamera(setDeviceSirial: any) {
         type: 'LiveStream',
       },
       decoder: {
-        readers: ['ean_reader'],
+        readers: ['code_128_reader'],
       },
     },
     function (err) {
