@@ -5,7 +5,9 @@ env:
 on:
   pull_request:
     types: [opened]
-
+defaults:
+  run:
+    working-directory: scripts
 jobs:
   Deploy-Preview:
     runs-on: ubuntu-latest
