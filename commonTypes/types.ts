@@ -64,6 +64,16 @@ export namespace CommonFirestore {
         source: t.string,
         city: t.string,
       }),
+      // NOTE: Manualy added by school or parent
+      t.type({
+        title: t.string,
+        body: t.string,
+        longitude: t.number,
+        latitude: t.number,
+        source: t.string,
+        since: timestamp,
+        until: timestamp,
+      }),
     ]);
 }
 
