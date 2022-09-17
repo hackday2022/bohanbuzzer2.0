@@ -68,7 +68,7 @@ export default function NotificationPage(props: any) {
       'parent'
     )
 
-    // setRegistrate(0)
+    setRegistrate(0)
   }
 
   return (
