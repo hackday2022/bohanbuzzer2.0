@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
@@ -49,29 +53,33 @@ select {
   width: 100%;
   height: 100%;
 }
+
 .cumtom-text-input {
-  outline: none;
+  outline-color: #fb9156;
   background: #f4f4f4;
   border-radius: 8px;
   width: 100%;
   border: none;
+  color: #333333;
   height: 40px;
 }
 .cumtom-textarea {
-  outline: none;
+  outline-color: #fb9156;
   background: #f4f4f4;
   border-radius: 8px;
   width: 100%;
   border: none;
   padding: 10px;
   height: 90px;
+  color: #333333;
 }
 
 .custom-select-button {
-  outline: none;
+  outline-color: #fb9156;
   border-radius: 8px;
   width: 100%;
   border: none;
+  color: #333333;
   height: 40px;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -211,7 +219,7 @@ select {
 }
 
 .segmented-button-custom {
-  bottom: 60px;
+  bottom: 24px;
   position: fixed;
   text-align: center;
   margin-left: auto;
@@ -260,4 +268,13 @@ video {
 .mimamori_setting_add_button {
   width: 90%;
   background-color: white;
+}
+
+/* For google map */
+.infoBox > img:first-child {
+  display: none;
+}
+
+.infoBox {
+  overflow: visible !important;
 }

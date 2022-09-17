@@ -16,6 +16,7 @@ export default function CustomAutoComplete(props: any) {
         value={props.value}
         placeholder={props.placeholder}
         onChange={props.onChange}
+        disabled={props.disable ? true : false}
       >
         {props.selectList
           ? props.selectList.map((item: string) => {
