@@ -57,6 +57,15 @@ select {
   border: none;
   height: 40px;
 }
+.cumtom-textarea{
+  outline: none;
+  background: #f4f4f4;
+  border-radius: 8px;
+  width: 100%;
+  border: none;
+  padding: 10px;
+  height: 90px;
+}
 
 .custom-select-button {
   outline: none;
