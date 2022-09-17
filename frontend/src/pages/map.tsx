@@ -13,13 +13,13 @@ import { useRouter } from 'next/router'
 export default function Map() {
   const router = useRouter()
   const [page, setPage] = useState(1)
-  const { isLoaded, loadError } = useJsApiLoader({
+  const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
   })
 
   return (
-    <div>
+    <div className="h-[100dvh] overscroll-y-none">
       {page === 1 ? (
         <MapPage isLoaded={isLoaded} />
       ) : page === 2 ? (

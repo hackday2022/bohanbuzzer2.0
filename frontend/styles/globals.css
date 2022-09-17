@@ -219,7 +219,7 @@ select {
 }
 
 .segmented-button-custom {
-  bottom: 24px;
+  bottom: calc(24px + env(safe-area-inset-bottom));
   position: fixed;
   text-align: center;
   margin-left: auto;
@@ -268,6 +268,14 @@ video {
 .mimamori_setting_add_button {
   width: 90%;
   background-color: white;
+}
+
+.scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
 }
 
 /* For google map */

@@ -1,12 +1,12 @@
 import { CircleF, InfoBox } from '@react-google-maps/api'
 import React, { useMemo } from 'react'
 import classNames from 'classnames'
+import { PriorityHighRounded } from '@mui/icons-material'
 
 const circleOption: google.maps.CircleOptions = {
-  fillColor: '#FB9156',
   fillOpacity: 0.4,
-  strokeColor: '#FB9156',
-  strokeOpacity: 0.4,
+  strokeColor: 'transparent',
+  strokeOpacity: 0,
   clickable: false,
   draggable: false,
   editable: false,
@@ -18,16 +18,26 @@ const circleOption: google.maps.CircleOptions = {
 export type SpotIconProps = {
   latLng: google.maps.LatLngLiteral
   isFocused: boolean
-  onFocus: (value: boolean) => void
-} & {
-  iconUrl: string
-}
+  onFocus?: (value: boolean) => void
+  onClick?: () => void
+} & (
+  | {
+      iconUrl: string
+      warn?: undefined
+    }
+  | {
+      iconUrl?: undefined
+      warn: true
+    }
+)
 
 const SpotIcon: React.FC<SpotIconProps> = ({
   latLng: latLngLiteral,
   isFocused,
   onFocus,
   iconUrl,
+  warn,
+  onClick,
 }) => {
   const latLng = useMemo(
     () => new google.maps.LatLng(latLngLiteral),
@@ -35,29 +45,41 @@ const SpotIcon: React.FC<SpotIconProps> = ({
   )
   return (
     <>
-      <CircleF center={latLng} options={circleOption} />
+      <CircleF
+        center={latLng}
+        options={{ ...circleOption, fillColor: warn ? '#FF6464' : '#FB9156' }}
+        onClick={(e) => e.stop()}
+      />
       <InfoBox position={latLng}>
         <div className="p-4 w-max -translate-x-1/2 -translate-y-1/2">
           <button
             className={classNames(
-              'bg-transparent p-0 group border-transparent cursor-pointer rounded-full w-max hover:scale-110 transition focus:outline-none'
+              'bg-transparent p-0 group border-transparent cursor-pointer rounded-full w-max transition focus:outline-none',
+              isFocused && 'animate-bounce'
             )}
             onClick={(e) => {
               e.stopPropagation()
-              console.log('click')
+              onClick?.()
             }}
-            onFocus={() => onFocus(true)}
-            onBlur={() => onFocus(false)}
+            onFocus={() => onFocus?.(true)}
+            onBlur={() => onFocus?.(false)}
           >
-            <img
-              width="48px"
-              height="48px"
-              className={classNames(
-                'object-cover rounded-full border-[3px] border-solid border-white drop-shadow-icon group-focus:ring ring-primary',
-                isFocused && 'ring'
-              )}
-              src={iconUrl}
-            />
+            {warn ? (
+              <div className="w-[48px] h-[48px] drop-shadow-icon rounded-full border-[3px] border-solid border-white bg-alert text-white flex items-center justify-center">
+                <PriorityHighRounded />
+              </div>
+            ) : (
+              <img
+                width="48px"
+                height="48px"
+                className={classNames(
+                  'object-cover rounded-full border-[3px] border-solid border-white drop-shadow-icon group-focus:ring',
+                  warn ? 'ring-alert' : 'ring-primary',
+                  isFocused && 'ring'
+                )}
+                src={iconUrl}
+              />
+            )}
           </button>
         </div>
       </InfoBox>
