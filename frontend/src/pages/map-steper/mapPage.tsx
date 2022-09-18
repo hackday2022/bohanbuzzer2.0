@@ -6,9 +6,6 @@ import DangerousInformation from '../component/dangerousInformation'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { Box, IconButton, Drawer } from '@mui/material'
 import { Warning } from '~/lib/fetchWaning'
-import * as t from 'io-ts'
-import { Firestore } from '~/types'
-import { useUser } from '~/lib/useUser'
 import { useChildren } from '~/lib/useChildren'
 
 export type MapPageProps = {
@@ -21,19 +18,6 @@ const defaultCenter = {
   lng: 139.7006,
 }
 
-const USERS = [
-  {
-    id: '0',
-    name: '彩香',
-    iconUrl:
-      'https://precious.ismcdn.jp/mwimgs/c/3/1080/img_c329b2977f0c543bb74a7e1b39dbfa47698703.jpg',
-    pos: {
-      lat: 35.6896,
-      lng: 139.7006,
-    },
-  },
-]
-
 export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
   const warnings = allWarnings?.filter((warning) => !('city' in warning))
   const { children } = useChildren()
@@ -43,7 +27,7 @@ export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
   const [focusItemId, setFocusItemId] = useState<{
     id: string
     type: 'user' | 'warn'
-  } | null>({ type: 'user', id: USERS[0].id })
+  } | null>(null)
 
   const [isFirstUpdate, setIsFirstUpdate] = useState(false)
 
@@ -53,17 +37,12 @@ export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
     }
     const array =
       focusItemId.type === 'user'
-        ? (USERS as {
-            id: string
-            pos: google.maps.LatLngLiteral
-          }[])
-        : (warnings.map(({ id, longitude, latitude }) => ({
+        ? [...children.entries()].map(([id, rest]) => ({
             id,
-            pos: { lng: longitude, lat: latitude },
-          })) as {
-            id: string
-            pos: google.maps.LatLngLiteral
-          }[])
+            longitude: rest.locationLog.slice(-1)[0].longitude,
+            latitude: rest.locationLog.slice(-1)[0].latitude,
+          }))
+        : warnings
 
     return array?.find(({ id }) => id === focusItemId.id) ?? null
   }, [focusItemId, warnings])
@@ -85,7 +64,7 @@ export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
       return
     }
     // map.setZoom(18)
-    map.panTo(focusItem.pos)
+    map.panTo({ lng: focusItem.longitude, lat: focusItem.latitude })
   }, [focusItemId, isLoaded, map, isFirstUpdate])
 
   const onUnmount = () => setMap(null)
