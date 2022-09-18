@@ -35,7 +35,7 @@ const USERS = [
 ]
 
 export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
-  const warnings = allWarnings.filter((warning) => !('city' in warning))
+  const warnings = allWarnings?.filter((warning) => !('city' in warning))
   const { children } = useChildren()
 
   const [map, setMap] = useState<google.maps.Map | null>(null)
@@ -65,14 +65,14 @@ export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
             pos: google.maps.LatLngLiteral
           }[])
 
-    return array.find(({ id }) => id === focusItemId.id) ?? null
+    return array?.find(({ id }) => id === focusItemId.id) ?? null
   }, [focusItemId, warnings])
 
   const warningFocusItem = useMemo(() => {
     if (focusItemId == null) {
       return null
     }
-    return warnings.find(({ id }) => id === focusItemId.id) ?? null
+    return warnings?.find(({ id }) => id === focusItemId.id) ?? null
   }, [warnings, focusItemId])
 
   useEffect(() => {

@@ -46,7 +46,9 @@ export default function NotificationPage({
   const [dangeroustime, setDangeroustime] = React.useState(periodsJa[0])
   const { user } = useUser()
 
-  const warnings = allWarnings.filter((warning) => !('city' in warning))
+  const warnings = allWarnings
+    ? allWarnings.filter((warning) => !('city' in warning))
+    : null
 
   const handleRegistrateClick = async () => {
     if (!user) return
@@ -95,7 +97,7 @@ export default function NotificationPage({
                   />
                 </IconButton>
               </Box>
-              {warnings.map((warning, i) => {
+              {warnings?.map((warning, i) => {
                 const prevWarning = warnings[i - 1]
                 const date =
                   'tweet_time' in warning ? warning.tweet_time : warning.since
