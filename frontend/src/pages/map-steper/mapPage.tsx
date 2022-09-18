@@ -7,6 +7,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { Box, IconButton, Drawer } from '@mui/material'
 import { Warning } from '~/lib/fetchWaning'
 import { LocationLogItem } from '~/lib/useChildren'
+import DangerousInformationInMap from '../component/dangerousInformationinMap'
 
 export type MapPageProps = {
   isLoaded: boolean
@@ -17,6 +18,7 @@ export type MapPageProps = {
     location: LocationLogItem | null
     locationLog: LocationLogItem[]
     id: string
+    deviceId: string
   }[]
 }
 
@@ -87,6 +89,14 @@ export default function MapPage({
       focusItemId.type === 'user' &&
       child.id === focusItemId?.id
   )
+
+  // useEffect(() => {
+  //   const q = query(
+  //     collection(db, `devices/${children[0].deviceId}/children`).withConverter(
+  //       Firestore.converter(Firestore.Child)
+  //     )
+  //   )
+  // }, [children])
 
   return (
     <>
@@ -189,6 +199,13 @@ export default function MapPage({
           <div>Loading...</div>
         )}
       </div>
+
+      <DangerousInformationInMap
+        time="アラートを受信しました"
+        adress="仙台市"
+        latlng="38.9038N, 141.6922F"
+        alerttime="9時18分ごろ"
+      />
 
       <Drawer
         anchor="bottom"

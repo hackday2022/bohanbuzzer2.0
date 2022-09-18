@@ -31,6 +31,7 @@ type ChildLocationLogs = Map<
     icon: string
     location: LocationLogItem | null
     locationLog: LocationLogItem[]
+    deviceId: string
   }
 >
 
@@ -89,6 +90,7 @@ export const useChildren = () => {
                   location:
                     newChildLocations[newChildLocations.length - 1] ?? null,
                   locationLog: newChildLocations,
+                  deviceId: child.deviceRef.id,
                 })
                 return new Map(prevChildren)
               })
