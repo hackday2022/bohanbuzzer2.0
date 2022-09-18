@@ -6,6 +6,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import CustomTextInput from '../component/customTextInput'
 import CustomAutoComplete from '../component/customAutoComplete'
+import { prefectures } from '~/lib/const'
 
 export default function RegistrationProfile(props: any) {
   return (
@@ -26,8 +27,8 @@ export default function RegistrationProfile(props: any) {
           caption="居住地域"
           value={props.area}
           onChange={(e: any) => props.setArea(e.target.value)}
-          placeholder="見守り太郎"
-          selectList={['見守り太郎', '見守り花子', '見守り桜子']}
+          placeholder="東京都"
+          selectList={prefectures}
         />
       </Box>
     </div>
