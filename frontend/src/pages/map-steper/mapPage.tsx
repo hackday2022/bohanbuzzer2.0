@@ -5,8 +5,7 @@ import UserSelectButton from '../../component/UserSelectButton'
 import DangerousInformation from '../component/dangerousInformation'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { Box, IconButton, Drawer } from '@mui/material'
-import { fetchTweetWarnings, TweetWarning, Warning } from '~/lib/fetchWaning'
-import { useOnSnapshot } from '~/lib/useOnSnapshot'
+import { Warning } from '~/lib/fetchWaning'
 import * as t from 'io-ts'
 import { Firestore } from '~/types'
 import { useUser } from '~/lib/useUser'
@@ -14,6 +13,7 @@ import { useChildren } from '~/lib/useChildren'
 
 export type MapPageProps = {
   isLoaded: boolean
+  allWarnings: Warning[]
 }
 
 const defaultCenter = {
@@ -34,8 +34,8 @@ const USERS = [
   },
 ]
 
-export default function MapPage({ isLoaded }: MapPageProps) {
-  const warnings = useOnSnapshot(fetchTweetWarnings, {})
+export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
+  const warnings = allWarnings?.filter((warning) => !('city' in warning))
   const { children } = useChildren()
 
   const [map, setMap] = useState<google.maps.Map | null>(null)
@@ -65,14 +65,14 @@ export default function MapPage({ isLoaded }: MapPageProps) {
             pos: google.maps.LatLngLiteral
           }[])
 
-    return array.find(({ id }) => id === focusItemId.id) ?? null
+    return array?.find(({ id }) => id === focusItemId.id) ?? null
   }, [focusItemId, warnings])
 
-  const tweetWarningFocusItem = useMemo(() => {
+  const warningFocusItem = useMemo(() => {
     if (focusItemId == null) {
       return null
     }
-    return warnings.find(({ id }) => id === focusItemId.id) ?? null
+    return warnings?.find(({ id }) => id === focusItemId.id) ?? null
   }, [warnings, focusItemId])
 
   useEffect(() => {
@@ -141,22 +141,19 @@ export default function MapPage({ isLoaded }: MapPageProps) {
                     />
                   ))}
               {map != null &&
-                warnings
-                  .filter((warn) => 'tweet_time' in warn)
-                  .map((warn) => (
-                    <SpotIcon
-                      key={warn.id}
-                      latLng={{ lat: warn.latitude, lng: warn.longitude }}
-                      isFocused={
-                        focusItemId?.type === 'warn' &&
-                        warn.id === focusItemId.id
-                      }
-                      onClick={() =>
-                        setFocusItemId({ type: 'warn', id: warn.id })
-                      }
-                      warn
-                    />
-                  ))}
+                warnings.map((warn) => (
+                  <SpotIcon
+                    key={warn.id}
+                    latLng={{ lat: warn.latitude, lng: warn.longitude }}
+                    isFocused={
+                      focusItemId?.type === 'warn' && warn.id === focusItemId.id
+                    }
+                    onClick={() =>
+                      setFocusItemId({ type: 'warn', id: warn.id })
+                    }
+                    warn
+                  />
+                ))}
             </GoogleMap>
             <div className="absolute inset-x-0 bottom-[86px] flex justify-end">
               <div className="flex px-8 py-4 space-x-4 overflow-x-scroll scrollbar-hidden">
@@ -185,7 +182,7 @@ export default function MapPage({ isLoaded }: MapPageProps) {
 
       <Drawer
         anchor="bottom"
-        open={tweetWarningFocusItem != null}
+        open={warningFocusItem != null}
         onClose={() => setFocusItemId(null)}
         sx={{
           pointerEvents: 'none',
@@ -197,13 +194,21 @@ export default function MapPage({ isLoaded }: MapPageProps) {
         transitionDuration={{ appear: 200, enter: 200, exit: 200 }}
       >
         <Box sx={{ pointerEvents: 'auto' }}>
-          {tweetWarningFocusItem != null && (
+          {warningFocusItem != null && (
             <DangerousInformation
-              date={tweetWarningFocusItem.tweet_time}
-              area={[tweetWarningFocusItem.title].flat(2).join(',')}
-              content={tweetWarningFocusItem.body}
-              resource={tweetWarningFocusItem.source}
-              time={tweetWarningFocusItem.tweet_time.toString()}
+              date={
+                'tweet_time' in warningFocusItem
+                  ? warningFocusItem.tweet_time
+                  : warningFocusItem.since
+              }
+              area={[warningFocusItem.title].flat(2).join(',')}
+              content={warningFocusItem.body}
+              resource={warningFocusItem.source}
+              time={
+                'tweet_time' in warningFocusItem
+                  ? warningFocusItem.tweet_time.toString()
+                  : warningFocusItem.since.toString()
+              }
               hideDate
               icon={
                 <IconButton onClick={() => setFocusItemId(null)}>

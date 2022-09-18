@@ -1,7 +1,7 @@
 import { Unsubscribe } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 
-export const useOnSnapshot = <Param, UpdateItem>(
+export const useOnSnapshot = <Param, UpdateItem extends { id: string }>(
   fetchWarnings: (
     param: Param,
     onUpdate: (updates: UpdateItem[]) => void
@@ -12,7 +12,11 @@ export const useOnSnapshot = <Param, UpdateItem>(
 
   useEffect(() => {
     const unsubscribe = fetchWarnings(param, (updates) => {
-      setItems(updates)
+      setItems((prev) => {
+        const prevIds = prev.map(({ id }) => id)
+
+        return [...prev, ...updates.filter(({ id }) => !prevIds.includes(id))]
+      })
     })
     return () => unsubscribe()
   }, [])

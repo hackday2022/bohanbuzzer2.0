@@ -9,21 +9,31 @@ import MapPage from '../pages/map-steper/mapPage'
 import FacePage from '../pages/map-steper/facePage'
 import { useJsApiLoader } from '@react-google-maps/api'
 import { useRouter } from 'next/router'
+import { useUser } from '~/lib/useUser'
+import { useOnSnapshot } from '~/lib/useOnSnapshot'
+import { fetchMapWarnings } from '~/lib/fetchWaning'
 
 export default function Map() {
-  const router = useRouter()
+  const { user } = useUser()
+
   const [page, setPage] = useState(1)
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
   })
 
+  const allWarnings = useOnSnapshot(fetchMapWarnings, {
+    // TODO: set correct value
+    userId: user?.uid ?? 'not_exists',
+    schoolId: 'abc',
+  })
+
   return (
     <div className="h-[100dvh] overscroll-y-none">
       {page === 1 ? (
-        <MapPage isLoaded={isLoaded} />
+        <MapPage isLoaded={isLoaded} allWarnings={allWarnings} />
       ) : page === 2 ? (
-        <NotificationPage router={router} />
+        <NotificationPage allWarnings={allWarnings} deviceSchool={''} />
       ) : (
         <FacePage />
       )}
