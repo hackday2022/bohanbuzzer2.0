@@ -19,7 +19,7 @@ export default function RegistrationDevice(props: any) {
       <Box mt={4} mb={3}>
         <CustomTextInput
           caption="デバイスの持ち主のお名前"
-          value={props.deviceName[props.page]}
+          value={props.deviceName ? props.deviceName[props.page] : null}
           onChange={(e: any) =>
             props.setDeviceName(e.target.value, props.page, props.deviceName)
           }

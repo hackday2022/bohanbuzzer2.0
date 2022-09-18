@@ -8,10 +8,13 @@ export const addParent = async (
   parent: { name: string; area: string; userId: string },
   children: { name: string; deviceId: string; schoolId: string }[]
 ) => {
-
-  function putError(errorMessage:string, errorno:number, toerror:React.Dispatch<React.SetStateAction<number>>) {
-    toerror(errorno);
-    return Error(errorMessage);
+  function putError(
+    errorMessage: string,
+    errorno: number,
+    toerror: React.Dispatch<React.SetStateAction<number>>
+  ) {
+    toerror(errorno)
+    return Error(errorMessage)
   }
 
   await setDoc(
@@ -30,7 +33,7 @@ export const addParent = async (
     )
 
     if (!(await getDoc(deviceRef)).exists()) {
-      throw putError("Device does not exist.", 2, setError);
+      throw putError('Device does not exist.', 2, setError)
     }
 
     const schoolRef = doc(db, 'schools', child.schoolId).withConverter(
@@ -38,7 +41,7 @@ export const addParent = async (
     )
 
     if (!(await getDoc(schoolRef)).exists()) {
-      throw putError("School does not exist.", 3, setError); //School does not exist.
+      throw putError('School does not exist.', 3, setError) //School does not exist.
     }
 
     await addDoc(
