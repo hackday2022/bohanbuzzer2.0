@@ -13,10 +13,11 @@ import CompleteButton from '../component/completeButton'
 import CustomAutoComplete from '../component/customAutoComplete'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import CustomLargeTextInput from '../component/customLargeTextInput'
-import { fetchWarnings, TweetWarning } from '~/lib/fetchWaning'
+import { fetchMapWarnings, TweetWarning, Warning } from '~/lib/fetchWaning'
 import { useOnSnapshot } from '~/lib/useOnSnapshot'
 import { addWarning } from '~/lib/addWarning'
 import { useUser } from '~/lib/useUser'
+import { add } from 'date-fns'
 
 const periods = {
   一週間: 7,
@@ -29,35 +30,28 @@ const periods = {
 // TODO: as を使わない方法で
 const periodsJa = Object.keys(periods) as (keyof typeof periods)[]
 
-export default function NotificationPage(props: any) {
+export type NotificationPageProps = {
+  allWarnings: Warning[]
+  deviceSchool: string
+}
+
+export default function NotificationPage({
+  allWarnings,
+  deviceSchool,
+}: NotificationPageProps) {
   const [registrate, setRegistrate] = React.useState(0)
   const [dangeroustitle, setDangeroustitle] = React.useState('')
   const [dangerouserea, setDangerousarea] = React.useState('')
   const [dangerouscontent, setDangerouscontent] = React.useState('')
   const [dangeroustime, setDangeroustime] = React.useState(periodsJa[0])
+  const { user } = useUser()
 
-  const warnings = useOnSnapshot(fetchWarnings, {
-    // TODO: set correct value
-    userId: 'abc',
-    schoolId: 'abc',
-  })
-
-  const tweetWarnings = useMemo(
-    () =>
-      warnings.filter(
-        (warning): warning is TweetWarning => 'tweet_time' in warning
-      ),
-    [warnings]
-  )
-
-  const { user, loading } = useUser()
+  const warnings = allWarnings.filter((warning) => !('city' in warning))
 
   const handleRegistrateClick = async () => {
     if (!user) return
 
-    console.log('handleRegistrateClick')
-    const until = new Date()
-    until.setDate(until.getDate() + periods[dangeroustime])
+    const until = add(new Date(), { days: periods[dangeroustime] })
 
     await addWarning(
       dangeroustitle,
@@ -101,25 +95,41 @@ export default function NotificationPage(props: any) {
                   />
                 </IconButton>
               </Box>
-              {tweetWarnings.map((warning, i) => (
-                <Box key={warning.id} mb={2}>
-                  <DangerousInformation
-                    date={warning.tweet_time}
-                    area={
-                      Array.isArray(warning.title)
-                        ? warning.title.join(', ')
-                        : warning.title
-                    }
-                    content={warning.body}
-                    resource={warning.source}
-                    time=""
-                    hideDate={
-                      warning.tweet_time.getTime() ===
-                      tweetWarnings[i - 1]?.tweet_time?.getTime()
-                    }
-                  />
-                </Box>
-              ))}
+              {warnings.map((warning, i) => {
+                const prevWarning = warnings[i - 1]
+                const date =
+                  'tweet_time' in warning ? warning.tweet_time : warning.since
+                const prevDate =
+                  prevWarning == null
+                    ? null
+                    : 'tweet_time' in prevWarning
+                    ? prevWarning.tweet_time
+                    : prevWarning.since
+                const showDate =
+                  prevDate != null &&
+                  date.toDateString() !== prevDate.toDateString()
+
+                return (
+                  <Box key={warning.id} mb={2}>
+                    <DangerousInformation
+                      date={
+                        'tweet_time' in warning
+                          ? warning.tweet_time
+                          : warning.since
+                      }
+                      area={
+                        Array.isArray(warning.title)
+                          ? warning.title.join(', ')
+                          : warning.title
+                      }
+                      content={warning.body}
+                      resource={warning.source}
+                      time=""
+                      hideDate={!showDate}
+                    />
+                  </Box>
+                )
+              })}
             </Grid>
           </Grid>
         ) : (
@@ -205,7 +215,6 @@ export default function NotificationPage(props: any) {
                   />
                   <CustomAutoComplete
                     caption="警戒期間"
-                    value={props.deviceSchool}
                     onChange={(e: any) => setDangeroustime(e.target.value)}
                     placeholder="1週間"
                     selectList={['1週間', '1ヶ月', '3ヶ月', '6ヶ月', '1年']}

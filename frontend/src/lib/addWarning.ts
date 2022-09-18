@@ -1,6 +1,7 @@
 import { addDoc, collection, Timestamp } from 'firebase/firestore'
 import { Firestore } from '~/types'
 import { db } from '~/firebase/init'
+import axios from 'axios'
 
 export const addWarning = async (
   title: string,
@@ -14,9 +15,11 @@ export const addWarning = async (
   let longitude = 0
 
   if (typeof location === 'string') {
-    // TODO: location（住所）から緯度経度に変換する
-    latitude = 139.7588499
-    longitude = 35.6769883
+    const res = await axios.post('/api/address_to_latlng', {
+      address: location,
+    })
+    latitude = res.data.lat
+    longitude = res.data.lng
   } else {
     latitude = location.latitude
     longitude = location.longitude
