@@ -15,13 +15,26 @@ import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import CustomLargeTextInput from '../component/customLargeTextInput'
 import { fetchWarnings, TweetWarning } from '~/lib/fetchWaning'
 import { useOnSnapshot } from '~/lib/useOnSnapshot'
+import { addWarning } from '~/lib/addWarning'
+import { useUser } from '~/lib/useUser'
+
+const periods = {
+  一週間: 7,
+  一ヶ月: 30,
+  三ヶ月: 90,
+  半年: 180,
+  一年: 365,
+}
+
+// TODO: as を使わない方法で
+const periodsJa = Object.keys(periods) as (keyof typeof periods)[]
 
 export default function NotificationPage(props: any) {
   const [registrate, setRegistrate] = React.useState(0)
   const [dangeroustitle, setDangeroustitle] = React.useState('')
   const [dangerouserea, setDangerousarea] = React.useState('')
   const [dangerouscontent, setDangerouscontent] = React.useState('')
-  const [dangeroustime, setDangeroustime] = React.useState('')
+  const [dangeroustime, setDangeroustime] = React.useState(periodsJa[0])
 
   const warnings = useOnSnapshot(fetchWarnings, {
     // TODO: set correct value
@@ -29,12 +42,34 @@ export default function NotificationPage(props: any) {
     schoolId: 'abc',
   })
 
-  const tweetWarnings = useMemo(() =>
-    warnings.filter(
-      (warning): warning is TweetWarning => 'tweet_time' in warning,
-      [warnings]
-    )
+  const tweetWarnings = useMemo(
+    () =>
+      warnings.filter(
+        (warning): warning is TweetWarning => 'tweet_time' in warning
+      ),
+    [warnings]
   )
+
+  const { user, loading } = useUser()
+
+  const handleRegistrateClick = async () => {
+    if (!user) return
+
+    console.log('handleRegistrateClick')
+    const until = new Date()
+    until.setDate(until.getDate() + periods[dangeroustime])
+
+    await addWarning(
+      dangeroustitle,
+      dangerouserea,
+      dangerouscontent,
+      until,
+      user.uid,
+      'parent'
+    )
+
+    setRegistrate(0)
+  }
 
   return (
     <div>
@@ -70,7 +105,11 @@ export default function NotificationPage(props: any) {
                 <Box key={warning.id} mb={2}>
                   <DangerousInformation
                     date={warning.tweet_time}
-                    area={warning.title}
+                    area={
+                      Array.isArray(warning.title)
+                        ? warning.title.join(', ')
+                        : warning.title
+                    }
                     content={warning.body}
                     resource={warning.source}
                     time=""
@@ -110,7 +149,7 @@ export default function NotificationPage(props: any) {
                     <CustomTextInput
                       caption="タイトル"
                       placeholder="不審者情報"
-                      onChange={setDangeroustitle}
+                      onChange={(e: any) => setDangeroustitle(e.target.value)}
                     />
                   </Box>
                   <Box my={3}>
@@ -119,7 +158,9 @@ export default function NotificationPage(props: any) {
                         <CustomTextInput
                           caption="場所"
                           placeholder="東京都渋谷区.."
-                          onChange={setDangerousarea}
+                          onChange={(e: any) =>
+                            setDangerousarea(e.target.value)
+                          }
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -159,11 +200,13 @@ export default function NotificationPage(props: any) {
                   <CustomLargeTextInput
                     caption="詳細"
                     placeholder="不審者情報"
+                    value={dangerouscontent}
+                    onChange={(e: any) => setDangerouscontent(e.target.value)}
                   />
                   <CustomAutoComplete
                     caption="警戒期間"
                     value={props.deviceSchool}
-                    onChange={setDangeroustime}
+                    onChange={(e: any) => setDangeroustime(e.target.value)}
                     placeholder="1週間"
                     selectList={['1週間', '1ヶ月', '3ヶ月', '6ヶ月', '1年']}
                   />
@@ -171,7 +214,7 @@ export default function NotificationPage(props: any) {
                     <CompleteButton
                       mode="light"
                       name="登録"
-                      onClick={() => setRegistrate(0)}
+                      onClick={handleRegistrateClick}
                     />
                   </Box>
                   <CompleteButton

@@ -11,15 +11,15 @@ export const addWarning = async (
   contributorType: 'parent' | 'school'
 ) => {
   let latitude = 0
-  let longitute = 0
+  let longitude = 0
 
   if (typeof location === 'string') {
     // TODO: location（住所）から緯度経度に変換する
     latitude = 139.7588499
-    longitute = 35.6769883
+    longitude = 35.6769883
   } else {
     latitude = location.latitude
-    longitute = location.longitude
+    longitude = location.longitude
   }
 
   const collectionPath =
@@ -34,7 +34,7 @@ export const addWarning = async (
     {
       title,
       latitude,
-      longitute,
+      longitude,
       body,
       since: Timestamp.now(),
       until: Timestamp.fromDate(until),

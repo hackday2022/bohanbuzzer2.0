@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "tslint pages/ .gitignore",
     "lint:fix": "tslint pages/ --fix .gitignore",
-    "format": "prettier . --check --ignore-path .gitignore",
-    "format:fix": "prettier . --write --ignore-path .gitignore",
+    "format": "prettier . --check --ignore-path .gitignore --cache",
+    "format:fix": "prettier . --write --ignore-path .gitignore --cache",
     "fix": "tslint pages/ --fix .gitignore && prettier . --write --ignore-path .gitignore"
   },
   "dependencies": {

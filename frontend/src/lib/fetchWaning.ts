@@ -65,11 +65,19 @@ export const fetchWarnings = (
             ...data,
             tweet_time: data.tweet_time.toDate(),
           })
+        } else if ('city' in data) {
+          warnings.push({
+            id: doc.id,
+            ...data,
+            city: data.city,
+            since: data.since.toDate(),
+          })
         } else {
           warnings.push({
             id: doc.id,
             ...data,
             since: data.since.toDate(),
+            until: data.until.toDate(),
           })
         }
       })
