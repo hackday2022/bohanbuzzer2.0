@@ -105,7 +105,11 @@ export default function NotificationPage(props: any) {
                 <Box key={warning.id} mb={2}>
                   <DangerousInformation
                     date={warning.tweet_time}
-                    area={warning.title}
+                    area={
+                      Array.isArray(warning.title)
+                        ? warning.title.join(', ')
+                        : warning.title
+                    }
                     content={warning.body}
                     resource={warning.source}
                     time=""
@@ -145,7 +149,7 @@ export default function NotificationPage(props: any) {
                     <CustomTextInput
                       caption="タイトル"
                       placeholder="不審者情報"
-                      onChange={(e) => setDangeroustitle(e.target.value)}
+                      onChange={(e: any) => setDangeroustitle(e.target.value)}
                     />
                   </Box>
                   <Box my={3}>
@@ -154,7 +158,9 @@ export default function NotificationPage(props: any) {
                         <CustomTextInput
                           caption="場所"
                           placeholder="東京都渋谷区.."
-                          onChange={(e) => setDangerousarea(e.target.value)}
+                          onChange={(e: any) =>
+                            setDangerousarea(e.target.value)
+                          }
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -195,12 +201,12 @@ export default function NotificationPage(props: any) {
                     caption="詳細"
                     placeholder="不審者情報"
                     value={dangerouscontent}
-                    onChange={(e) => setDangerouscontent(e.target.value)}
+                    onChange={(e: any) => setDangerouscontent(e.target.value)}
                   />
                   <CustomAutoComplete
                     caption="警戒期間"
                     value={props.deviceSchool}
-                    onChange={(e) => setDangeroustime(e.target.value)}
+                    onChange={(e: any) => setDangeroustime(e.target.value)}
                     placeholder="1週間"
                     selectList={['1週間', '1ヶ月', '3ヶ月', '6ヶ月', '1年']}
                   />
