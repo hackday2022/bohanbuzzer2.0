@@ -9,11 +9,16 @@ import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded'
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
 import { Grid } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
+import Avatar from '@mui/material/Avatar'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import CompleteButton from './completeButton'
 
 export default function DangerousInformationInMap(props: any) {
+  const [show, setShow] = React.useState(1)
   return (
     <div>
-      {props.show == 1 ? (
+      {show == 1 ? (
         <Grid
           container
           alignItems="center"
@@ -31,8 +36,7 @@ export default function DangerousInformationInMap(props: any) {
               zIndex: 1,
             }}
           >
-            <CardContent sx={{ textAlign: 'left' }}>
-              <ErrorIcon sx={{ color: '#FF6464', fontSize: '27px' }} />
+            <CardContent sx={{ textAlign: 'center', pt: 8 }}>
               <Typography
                 variant="h2"
                 sx={{
@@ -53,9 +57,9 @@ export default function DangerousInformationInMap(props: any) {
                   right: '0px',
                   top: '13px',
                 }}
-                onClick={() => props.show_func(0)}
+                onClick={() => setShow(0)}
               >
-                <CancelOutlinedIcon
+                <KeyboardArrowDownIcon
                   sx={{
                     color: '#333333',
                     fontSize: '20px',
@@ -64,44 +68,95 @@ export default function DangerousInformationInMap(props: any) {
                   }}
                 />
               </IconButton>
-              <Box ml={1}>
+              <Box mt={4} mb={4}>
+                <Grid
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  direction="column"
+                  sx={{ zIndex: 1 }}
+                >
+                  <Avatar
+                    alt="細川"
+                    src="./png"
+                    sx={{
+                      align: 'center',
+                      width: 72,
+                      height: 72,
+                      boxShadow: 'inset 0 0 5px 2px #fff',
+                      filter: 'drop-shadow(0px 1px 8px rgba(0, 0, 0, 0.3))',
+                      border: 'white 50px',
+                    }}
+                  />
+                </Grid>
+              </Box>
+
+              <Box>
+                <IconButton
+                  sx={{
+                    float: 'right',
+                    position: 'absolute',
+                    right: '16%',
+                  }}
+                  onClick={() => console.log('W')}
+                >
+                  <ContentCopyIcon />
+                </IconButton>
+              </Box>
+              <Box>
                 <Typography
-                  variant="subtitle1"
+                  variant="subtitle2"
                   sx={{
                     mt: '5px',
                     verticalAlign: '8px',
-                    color: 'text.secondary',
+                    color: '#333',
                   }}
                 >
-                  {props.content}
+                  {props.adress}
                 </Typography>
-                <Box mt={2}>
-                  <PlaceOutlinedIcon
-                    sx={{ color: 'text.secondary', fontSize: '16px' }}
-                  />
+                <Box mt={1}>
                   <Typography
                     variant="caption"
                     sx={{
-                      ml: 1,
-                      verticalAlign: '3px',
-                      color: 'text.secondary',
+                      mt: '10px',
+                      verticalAlign: '8px',
+                      color: '#707070',
                     }}
                   >
-                    {props.area}
+                    {props.latlng}
                   </Typography>
-                  <Box mt={0}>
-                    <LanguageRoundedIcon
-                      sx={{ color: 'text.secondary', fontSize: '16px' }}
-                    />
+                </Box>
+                <Box
+                  mx="auto"
+                  mt={1}
+                  mb={7}
+                  sx={{ width: '60%', textAlign: 'center' }}
+                >
+                  <CompleteButton
+                    className="alert_completeButton"
+                    name="GoogleMapで見る"
+                    onClick={() => null}
+                  />
+                </Box>
+                <Box mt={2}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      verticalAlign: '3px',
+                      color: '#333',
+                    }}
+                  >
+                    発信時刻
+                  </Typography>
+                  <Box mt={1} mb={5}>
                     <Typography
-                      variant="caption"
+                      variant="subtitle2"
                       sx={{
-                        ml: 1,
                         verticalAlign: '3px',
-                        color: 'text.secondary',
+                        color: '#333',
                       }}
                     >
-                      データ提供元： {props.resource}
+                      {props.alerttime}
                     </Typography>
                   </Box>
                 </Box>

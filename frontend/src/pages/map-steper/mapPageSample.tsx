@@ -2,16 +2,13 @@ import React from 'react'
 import DangerousInformationInMap from '../component/dangerousInformationinMap'
 
 export default function MapPage(props: any) {
-  const [show, setShow] = React.useState(1)
   return (
     <div>
       <DangerousInformationInMap
-        show={show}
-        show_func={setShow}
-        time="9月12日15時ごろ"
-        content="渡辺が女性を追いかけた"
-        area="沖縄県那覇市"
-        resource="日本不審者団体"
+        time="アラートを受信しました"
+        adress=" 兵庫県神戸市付近"
+        latlng="35.000000N, 135.000000F"
+        alerttime="14時37分ごろ(15分前)"
       />
     </div>
   )
