@@ -32,6 +32,7 @@ export namespace CommonFirestore {
 
   export const getGps = <T extends t.Mixed>(timestamp: T) =>
     t.type({
+      id: t.string,
       latitude: t.number,
       longitude: t.number,
       time: timestamp,
@@ -40,6 +41,7 @@ export namespace CommonFirestore {
   export const getDevice = <T extends t.Mixed>(timestamp: T) =>
     t.type({
       gpsLogs: t.array(getGps(timestamp)),
+      gpsIdOnAlerted: t.array(t.string),
     });
 
   export const getWarning = <T extends t.Mixed>(timestamp: T) =>
