@@ -10,6 +10,7 @@ import CardContent from '@mui/material/CardContent'
 import CompleteButton from '../component/completeButton'
 import Custom2wayTextInput from '../component/custom2waychangeTextInput'
 import RegistrationDevice from '../setup-method/registrationDevice'
+import { prefectures } from '~/lib/const'
 
 export default function FacePage(props: any) {
   const [registrate, setRegistrate] = React.useState(0)
@@ -64,7 +65,7 @@ export default function FacePage(props: any) {
                   caption2="居住地域"
                   placeholder1="見守り太郎"
                   placeholder2="那覇"
-                  listitem={['札幌', '那覇']}
+                  listitem={prefectures}
                   onChange1={setChildname}
                   onChange2={setChildarea}
                 />
@@ -74,7 +75,7 @@ export default function FacePage(props: any) {
                     caption2="居住地域"
                     placeholder1="見守り太郎"
                     placeholder2="那覇"
-                    listitem={['札幌', '那覇']}
+                    listitem={prefectures}
                     onChange1={setChildname}
                     onChange2={setChildarea}
                     name="太郎"
