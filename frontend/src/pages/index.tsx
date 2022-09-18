@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import React from 'react'
 // import Head from 'next/head'
-// import Image from 'next/image'
+import Image from 'next/image'
 import '../firebase/init'
 import GoogleLogin from '../auth/loginByGoogle'
 import Box from '@mui/material/Box'
@@ -45,7 +45,8 @@ const Home: NextPage = () => {
               variant="extended"
               sx={{ bgcolor: 'white', textTransform: 'none' }}
             >
-              <GoogleIcon sx={{ mr: 1 }} />
+              {/* <GoogleIcon sx={{ mr: 1 }} /> */}
+              <Image src="/g-logo.png" alt="" width={24} height={24} />
               <Box sx={{ px: 1 }}>
                 <Typography variant="subtitle1">Googleでログイン</Typography>
               </Box>
