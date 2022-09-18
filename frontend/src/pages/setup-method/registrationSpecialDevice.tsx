@@ -30,7 +30,7 @@ export default function RegistrationDevice(props: any) {
         <InputSirialNumber
           caption="シリアル番号"
           placeholder="手動で入力"
-          value={props.deviceSirial[props.page]}
+          value={props.deviceSirial ? props.deviceSirial[props.page] : null}
           setDeviceSirial={(e: any) =>
             props.setDeviceSirial(
               e.target.value,
@@ -43,7 +43,7 @@ export default function RegistrationDevice(props: any) {
       <Box mt={3} mb={1}>
         <CustomAutoComplete
           caption="持ち主の所属学校"
-          value={props.deviceSchool[props.page]}
+          value={props.deviceSchool ? props.deviceSchool[props.page] : null}
           onChange={(e: any) =>
             props.setDeviceSchool(
               e.target.value,
