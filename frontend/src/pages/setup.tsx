@@ -11,7 +11,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CompleteButton from './component/completeButton'
 import RegistrationProfile from './setup-method/registrationProfile'
-import RegistrationDevice from './setup-method/registrationDevice'
+import RegistrationDevice from './setup-method/registrationSpecialDevice'
 import { useRouter } from 'next/router'
 import { addParent } from '~/lib/addParent'
 import { fetchSchools } from '~/lib/fetchSchools'
@@ -21,12 +21,35 @@ const Setup: NextPage = () => {
   const [page, setPage] = React.useState(0)
   const [name, setName] = React.useState('')
   const [area, setArea] = React.useState('')
-  const [deviceName, setDeviceName] = React.useState('')
-  const [deviceSchool, setDeviceSchool] = React.useState('')
-  const [deviceSirial, setDeviceSirial] = React.useState('')
+  const [deviceName, setDeviceName] = React.useState([])
+  const [deviceSchool, setDeviceSchool] = React.useState([])
+  const [deviceSirial, setDeviceSirial] = React.useState([])
   const [schools, setSchools] = React.useState<{ id: string; name: string }[]>(
     []
   )
+  function setDeviceNameinList(name: string, page: number, deviceName: any) {
+    let deviceCopy = deviceName.concat()
+    deviceCopy[page] = name
+    setDeviceName(deviceCopy)
+  }
+  function setDeviceSirialinList(
+    name: string,
+    page: number,
+    deviceSirial: any
+  ) {
+    let deviceSirialCopy = deviceSirial.concat()
+    deviceSirialCopy[page] = name
+    setDeviceSirial(deviceSirialCopy)
+  }
+  function setDeviceSchoolinList(
+    name: string,
+    page: number,
+    deviceSchool: any
+  ) {
+    let deviceSchoolCopy = deviceSchool.concat()
+    deviceSchoolCopy[page] = name
+    setDeviceSchool(deviceSchoolCopy)
+  }
 
   const [fetchingSchools, setFetchingSchools] = React.useState(false)
 
@@ -38,7 +61,7 @@ const Setup: NextPage = () => {
         setFetchingSchools(true)
         const schoolList = await fetchSchools()
         setSchools(schoolList)
-        setDeviceSchool(schoolList[0].name)
+        setDeviceSchoolinList(schoolList[0].name, 0, deviceSchool)
         setFetchingSchools(false)
       } catch (e) {
         console.error(e)
@@ -48,26 +71,30 @@ const Setup: NextPage = () => {
   }, [])
 
   const handleCompletedButton = async () => {
-    const schoolId = schools.find((school) => school.name === deviceSchool)?.id
-    if (!schoolId) return
+    for (let i = 0; i < deviceSirial.length; i++) {
+      console.log(i)
+      const schoolId = schools.find(
+        (school) => school.name === deviceSchool[i]
+      )?.id
+      if (!schoolId) return console.log("A school doesn't exist")
 
-    if (!user) return
+      if (!user) return console.log("A user doesn't exist")
 
-    await addParent(
-      {
-        name,
-        area,
-        userId: user.uid,
-      },
-      [
+      addParent(
         {
-          name: deviceName,
-          deviceId: deviceSirial.trim(),
-          schoolId: schoolId,
+          name,
+          area,
+          userId: user.uid,
         },
-      ]
-    )
-
+        [
+          {
+            name: deviceName[i],
+            deviceId: deviceSirial[i].trim(),
+            schoolId: schoolId,
+          },
+        ]
+      )
+    }
     router.push('/map')
   }
 
@@ -116,20 +143,47 @@ const Setup: NextPage = () => {
                   area={area}
                   setArea={setArea}
                 />
-              ) : (
+              ) : page === 1 ? (
                 <RegistrationDevice
-                  title="デバイスの設定"
+                  title={'デバイスの設定'}
                   add={1}
                   deviceName={deviceName}
-                  setDeviceName={setDeviceName}
+                  setDeviceName={setDeviceNameinList}
                   deviceSirial={deviceSirial}
-                  setDeviceSirial={setDeviceSirial}
+                  setDeviceSirial={setDeviceSirialinList}
                   deviceSchool={deviceSchool}
-                  setDeviceSchool={setDeviceSchool}
+                  setDeviceSchool={setDeviceSchoolinList}
                   schoolList={schools.map((school) => school.name)}
                   fetchingSchools={fetchingSchools}
+                  page={page - 1}
+                  addOnClick={() => {
+                    setPage(page + 1)
+                    setDeviceSirial([...deviceSirial, ''])
+                    setDeviceName([...deviceName, ''])
+                    setDeviceSchool([...deviceSchool, schools[0].name])
+                  }} // ここを変更
                 />
-              )}
+              ) : page >= 2 ? (
+                <RegistrationDevice
+                  title={'デバイスの設定' + page + 'つ目'}
+                  add={1}
+                  page={page - 1}
+                  deviceName={deviceName}
+                  setDeviceName={setDeviceNameinList}
+                  deviceSirial={deviceSirial}
+                  setDeviceSirial={setDeviceSirialinList}
+                  deviceSchool={deviceSchool}
+                  setDeviceSchool={setDeviceSchoolinList}
+                  schoolList={schools.map((school) => school.name)}
+                  fetchingSchools={fetchingSchools}
+                  addOnClick={() => {
+                    setPage(page + 1)
+                    setDeviceSirial([...deviceSirial, ''])
+                    setDeviceName([...deviceName, ''])
+                    setDeviceSchool([...deviceSchool, schools[0].name])
+                  }}
+                />
+              ) : null}
               <Box mb={2}>
                 {page === 0 ? (
                   <CompleteButton
@@ -146,11 +200,11 @@ const Setup: NextPage = () => {
                 )}
               </Box>
               <Box mb={2}>
-                {page === 1 ? (
+                {page >= 1 ? (
                   <CompleteButton
                     mode=""
                     name="戻る"
-                    onClick={() => setPage(0)}
+                    onClick={() => setPage(page - 1)}
                   ></CompleteButton>
                 ) : (
                   <CompleteButton
