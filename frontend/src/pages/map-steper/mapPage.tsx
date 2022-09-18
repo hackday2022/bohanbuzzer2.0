@@ -81,7 +81,7 @@ export default function MapPage({
 
   const onUnmount = () => setMap(null)
 
-  const selectedChild = children.find(
+  const selectedChild = children?.find(
     (child) =>
       focusItemId != null &&
       focusItemId.type === 'user' &&
