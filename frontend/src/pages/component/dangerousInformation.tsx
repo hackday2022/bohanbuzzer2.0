@@ -44,7 +44,6 @@ export default function DangerousInformation(props: DangerousInformationProps) {
               variant="subtitle2"
               sx={{
                 ml: 1,
-
                 display: 'inline',
                 verticalAlign: '8px',
                 color: '#333333',

@@ -296,3 +296,7 @@ video {
 .infoBox {
   overflow: visible !important;
 }
+
+.alert_completeButton {
+  padding-top: 7px;
+}
