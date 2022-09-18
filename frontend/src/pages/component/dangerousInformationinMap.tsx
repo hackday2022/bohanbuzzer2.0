@@ -79,7 +79,14 @@ export default function DangerousInformationInMap(props: any) {
                   <Avatar
                     alt="細川"
                     src="./png"
-                    sx={{ align: 'center', width: 72, height: 72 }}
+                    sx={{
+                      align: 'center',
+                      width: 72,
+                      height: 72,
+                      boxShadow: 'inset 0 0 5px 2px #fff',
+                      filter: 'drop-shadow(0px 1px 8px rgba(0, 0, 0, 0.3))',
+                      border: 'white 50px',
+                    }}
                   />
                 </Grid>
               </Box>
