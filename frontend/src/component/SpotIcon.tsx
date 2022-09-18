@@ -1,7 +1,7 @@
 import { CircleF, InfoBox } from '@react-google-maps/api'
 import React, { useMemo } from 'react'
 import classNames from 'classnames'
-import { PriorityHighRounded } from '@mui/icons-material'
+import { Campaign, PriorityHighRounded } from '@mui/icons-material'
 
 const circleOption: google.maps.CircleOptions = {
   fillOpacity: 0.4,
@@ -24,10 +24,17 @@ export type SpotIconProps = {
   | {
       iconUrl: string
       warn?: undefined
+      alert?: undefined
     }
   | {
       iconUrl?: undefined
       warn: true
+      alert?: undefined
+    }
+  | {
+      iconUrl?: undefined
+      warn?: undefined
+      alert: true
     }
 )
 
@@ -38,6 +45,7 @@ const SpotIcon: React.FC<SpotIconProps> = ({
   iconUrl,
   warn,
   onClick,
+  alert,
 }) => {
   const latLng = useMemo(
     () => new google.maps.LatLng(latLngLiteral),
@@ -47,11 +55,14 @@ const SpotIcon: React.FC<SpotIconProps> = ({
     <>
       <CircleF
         center={latLng}
-        options={{ ...circleOption, fillColor: warn ? '#FF6464' : '#FB9156' }}
+        options={{
+          ...circleOption,
+          fillColor: alert ? '#FF0000' : warn ? '#FF6464' : '#FB9156',
+        }}
         onClick={(e) => e.stop()}
       />
       <InfoBox position={latLng}>
-        <div className="p-4 w-max -translate-x-1/2 -translate-y-1/2">
+        <div className="p-4 -translate-x-1/2 -translate-y-1/2 w-max">
           <button
             className={classNames(
               'bg-transparent p-0 group border-transparent cursor-pointer rounded-full w-max transition focus:outline-none',
@@ -67,6 +78,10 @@ const SpotIcon: React.FC<SpotIconProps> = ({
             {warn ? (
               <div className="w-[48px] h-[48px] drop-shadow-icon rounded-full border-[3px] border-solid border-white bg-alert text-white flex items-center justify-center">
                 <PriorityHighRounded />
+              </div>
+            ) : alert ? (
+              <div className="w-[48px] h-[48px] drop-shadow-icon rounded-full border-[3px] border-solid border-white bg-alert text-white flex items-center justify-center">
+                <Campaign />
               </div>
             ) : (
               <img

@@ -13,19 +13,24 @@ import { db } from '~/firebase/init'
 import { Firestore } from '~/types'
 import * as t from 'io-ts'
 import { useUser } from './useUser'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
+export type LocationLogItem = {
+  time: Date
+  name: string
+  id: string
+  latitude: number
+  longitude: number
+  isAlerted: boolean
+}
 
 type ChildLocationLogs = Map<
   string,
   {
     name: string
     icon: string
-    locationLog: {
-      id: string
-      latitude: number
-      longitude: number
-      time: Date
-    }[]
+    location: LocationLogItem | null
+    locationLog: LocationLogItem[]
   }
 >
 
@@ -65,8 +70,8 @@ export const useChildren = () => {
           const unsubscribe = onSnapshot(
             deviceRef.withConverter(Firestore.converter(Firestore.Device)),
             (doc) => {
-              console.log(doc)
-              const locations = doc.data()?.gpsLogs
+              const data = doc.data()
+              const locations = data?.gpsLogs
 
               if (!locations) return
 
@@ -74,15 +79,19 @@ export const useChildren = () => {
                 ...location,
                 time: location.time.toDate(),
                 name: child.name,
+                isAlerted: data.gpsIdOnAlerted.some((id) => id === location.id),
               }))
 
-              setChildren(
-                children.set(child.id, {
+              setChildren((prevChildren) => {
+                prevChildren.set(child.id, {
                   name: child.name,
                   icon: ICON_URL,
+                  location:
+                    newChildLocations[newChildLocations.length - 1] ?? null,
                   locationLog: newChildLocations,
                 })
-              )
+                return new Map(prevChildren)
+              })
             }
           )
 
@@ -94,7 +103,17 @@ export const useChildren = () => {
         unsubscribes.forEach((u) => u?.())
       }
     })()
-  })
+  }, [user])
 
   return { children }
+}
+
+export const useChildrenArray = () => {
+  const { children } = useChildren()
+  console.log(children)
+
+  return useMemo(
+    () => [...children.entries()].map(([id, rest]) => ({ id, ...rest })),
+    [children]
+  )
 }
