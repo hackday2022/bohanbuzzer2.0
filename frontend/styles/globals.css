@@ -263,8 +263,8 @@ video {
 }
 .in_reading_camera_button {
   position: fixed;
-  bottom: 6rem;
-  width: 90vw;
+  bottom: 90px;
+  width: 80vw;
   left: 50%;
   transform: translateX(-50%);
   -webkit-transform: translateX(-50%);

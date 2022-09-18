@@ -60,6 +60,7 @@ export default function InputSirialNumber(props: any) {
           mode=""
           name="戻る"
           className="in_reading_camera_button"
+          iscolorwhite={true}
           onClick={() => StopCamera()}
         ></CompleteButton>
         <p className="camera_text">

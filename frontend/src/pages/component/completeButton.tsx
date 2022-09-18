@@ -38,9 +38,15 @@ export default function CompleteButton(props: any) {
           width: '100%',
         }}
       >
-        <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
-          {props.name}
-        </Typography>
+        {props.iscolorwhite ? (
+          <Typography variant="subtitle1" sx={{ color: 'white' }}>
+            {props.name}
+          </Typography>
+        ) : (
+          <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
+            {props.name}
+          </Typography>
+        )}
       </Button>
     )
   }
