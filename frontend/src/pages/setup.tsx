@@ -19,16 +19,17 @@ import { useUser } from '~/lib/useUser'
 
 const Setup: NextPage = () => {
   const [page, setPage] = React.useState(0)
+  const [error, setError] = React.useState(0)
   const [name, setName] = React.useState('')
   const [area, setArea] = React.useState('')
-  const [deviceName, setDeviceName] = React.useState([])
-  const [deviceSchool, setDeviceSchool] = React.useState([])
-  const [deviceSirial, setDeviceSirial] = React.useState([])
+  const [deviceName, setDeviceName] = React.useState<string[]>([])
+  const [deviceSchool, setDeviceSchool] = React.useState<string[]>([])
+  const [deviceSirial, setDeviceSirial] = React.useState<string[]>([])
   const [schools, setSchools] = React.useState<{ id: string; name: string }[]>(
     []
   )
   function setDeviceNameinList(name: string, page: number, deviceName: any) {
-    let deviceCopy = deviceName.concat()
+    const deviceCopy = deviceName.concat()
     deviceCopy[page] = name
     setDeviceName(deviceCopy)
   }
@@ -37,7 +38,7 @@ const Setup: NextPage = () => {
     page: number,
     deviceSirial: any
   ) {
-    let deviceSirialCopy = deviceSirial.concat()
+    const deviceSirialCopy = deviceSirial.concat()
     deviceSirialCopy[page] = name
     setDeviceSirial(deviceSirialCopy)
   }
@@ -46,7 +47,7 @@ const Setup: NextPage = () => {
     page: number,
     deviceSchool: any
   ) {
-    let deviceSchoolCopy = deviceSchool.concat()
+    const deviceSchoolCopy = deviceSchool.concat()
     deviceSchoolCopy[page] = name
     setDeviceSchool(deviceSchoolCopy)
   }
@@ -81,6 +82,7 @@ const Setup: NextPage = () => {
       if (!user) return console.log("A user doesn't exist")
 
       addParent(
+        setError,
         {
           name,
           area,
@@ -94,6 +96,11 @@ const Setup: NextPage = () => {
           },
         ]
       )
+      if (error !== 0) {
+        console.log(error)
+      } else {
+        console.log('success')
+      }
     }
     router.push('/map')
   }
