@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import SegmentedButton from '../pages/component/segmentControlButton'
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
@@ -8,10 +8,10 @@ import NotificationPage from '../pages/map-steper/notificationPage'
 import MapPage from '../pages/map-steper/mapPage'
 import FacePage from '../pages/map-steper/facePage'
 import { useJsApiLoader } from '@react-google-maps/api'
-import { useRouter } from 'next/router'
 import { useUser } from '~/lib/useUser'
 import { useOnSnapshot } from '~/lib/useOnSnapshot'
 import { fetchMapWarnings } from '~/lib/fetchWaning'
+import { useChildrenArray } from '~/lib/useChildren'
 
 export default function Map() {
   const { user } = useUser()
@@ -28,10 +28,23 @@ export default function Map() {
     schoolId: 'abc',
   })
 
+  const children = useChildrenArray()
+
+  const mapPage = useMemo(
+    () => (
+      <MapPage
+        isLoaded={isLoaded}
+        allWarnings={allWarnings}
+        childrens={children}
+      />
+    ),
+    [isLoaded, allWarnings, children]
+  )
+
   return (
     <div className="h-[100dvh] overscroll-y-none">
       {page === 1 ? (
-        <MapPage isLoaded={isLoaded} allWarnings={allWarnings} />
+        mapPage
       ) : page === 2 ? (
         <NotificationPage allWarnings={allWarnings} deviceSchool={''} />
       ) : (

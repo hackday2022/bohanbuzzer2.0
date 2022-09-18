@@ -6,11 +6,18 @@ import DangerousInformation from '../component/dangerousInformation'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { Box, IconButton, Drawer } from '@mui/material'
 import { Warning } from '~/lib/fetchWaning'
-import { useChildren } from '~/lib/useChildren'
+import { LocationLogItem } from '~/lib/useChildren'
 
 export type MapPageProps = {
   isLoaded: boolean
   allWarnings: Warning[]
+  childrens: {
+    name: string
+    icon: string
+    location: LocationLogItem | null
+    locationLog: LocationLogItem[]
+    id: string
+  }[]
 }
 
 const defaultCenter = {
@@ -18,9 +25,12 @@ const defaultCenter = {
   lng: 139.7006,
 }
 
-export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
+export default function MapPage({
+  isLoaded,
+  allWarnings,
+  childrens: children,
+}: MapPageProps) {
   const warnings = allWarnings?.filter((warning) => !('city' in warning))
-  const { children } = useChildren()
 
   const [map, setMap] = useState<google.maps.Map | null>(null)
 
@@ -37,10 +47,10 @@ export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
     }
     const array =
       focusItemId.type === 'user'
-        ? [...children.entries()].map(([id, rest]) => ({
-            id,
-            longitude: rest.locationLog.slice(-1)[0].longitude,
-            latitude: rest.locationLog.slice(-1)[0].latitude,
+        ? children.map((child) => ({
+            id: child.id,
+            longitude: child.location?.longitude,
+            latitude: child.location?.latitude,
           }))
         : warnings
 
@@ -63,11 +73,20 @@ export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
       setIsFirstUpdate(true)
       return
     }
-    // map.setZoom(18)
+    if (focusItem.longitude == null || focusItem.latitude == null) {
+      return
+    }
     map.panTo({ lng: focusItem.longitude, lat: focusItem.latitude })
   }, [focusItemId, isLoaded, map, isFirstUpdate])
 
   const onUnmount = () => setMap(null)
+
+  const selectedChild = children?.find(
+    (child) =>
+      focusItemId != null &&
+      focusItemId.type === 'user' &&
+      child.id === focusItemId?.id
+  )
 
   return (
     <>
@@ -100,14 +119,13 @@ export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
               mapContainerClassName="w-full h-full focus:outline-none"
             >
               {map != null &&
-                [...children.entries()]
-                  .map((child) => ({ id: child[0], ...child[1] }))
-                  .map((child) => (
+                children.map((child) =>
+                  child.location != null ? (
                     <SpotIcon
                       key={child.id}
                       latLng={{
-                        lat: child.locationLog.slice(-1)[0].latitude,
-                        lng: child.locationLog.slice(-1)[0].longitude,
+                        lat: child.location.latitude,
+                        lng: child.location.longitude,
                       }}
                       isFocused={
                         focusItemId?.type === 'user' &&
@@ -117,6 +135,21 @@ export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
                         setFocusItemId({ type: 'user', id: child.id })
                       }}
                       iconUrl={child.icon}
+                    />
+                  ) : null
+                )}
+              {selectedChild != null &&
+                selectedChild.locationLog
+                  .filter(({ isAlerted }) => isAlerted)
+                  .map((log) => (
+                    <SpotIcon
+                      key={log.id}
+                      latLng={{ lat: log.latitude, lng: log.longitude }}
+                      isFocused={false}
+                      onClick={() => {
+                        // TODO: do nothing
+                      }}
+                      alert
                     />
                   ))}
               {map != null &&
@@ -136,21 +169,19 @@ export default function MapPage({ isLoaded, allWarnings }: MapPageProps) {
             </GoogleMap>
             <div className="absolute inset-x-0 bottom-[86px] flex justify-end">
               <div className="flex px-8 py-4 space-x-4 overflow-x-scroll scrollbar-hidden">
-                {[...children.entries()]
-                  .map((child) => ({ id: child[0], ...child[1] }))
-                  .map((child) => (
-                    <UserSelectButton
-                      key={child.id}
-                      user={{ name: child.name, iconUrl: child.icon }}
-                      isSelected={
-                        focusItemId?.type === 'user' &&
-                        focusItemId.id === child.id
-                      }
-                      onSelect={() => {
-                        setFocusItemId({ type: 'user', id: child.id })
-                      }}
-                    />
-                  ))}
+                {children.map((child) => (
+                  <UserSelectButton
+                    key={child.id}
+                    user={{ name: child.name, iconUrl: child.icon }}
+                    isSelected={
+                      focusItemId?.type === 'user' &&
+                      focusItemId.id === child.id
+                    }
+                    onSelect={() => {
+                      setFocusItemId({ type: 'user', id: child.id })
+                    }}
+                  />
+                ))}
               </div>
             </div>
           </>
